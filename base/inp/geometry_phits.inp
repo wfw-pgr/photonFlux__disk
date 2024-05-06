@@ -1,0 +1,96 @@
+
+$$ ========================================================== $$
+$$ ===       geometry_phits.inp                           === $$
+$$ ========================================================== $$
+$$
+[Surface]
+
+   $$ -- target systems -- $$
+   $$[surfNum] [rpp] [xMin] [xMax] [yMin]    [yMax]    [zMin]       [zMax]       -- $
+   16  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.m4.zMin @cvt.m4.zMax
+   17  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.m3.zMin @cvt.m3.zMax
+   18  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.m2.zMin @cvt.m2.zMax
+   19  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.m1.zMin @cvt.m1.zMax
+   
+   21  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.01.zMin @cvt.01.zMax
+   22  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.02.zMin @cvt.02.zMax
+   23  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.03.zMin @cvt.03.zMax
+   24  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.04.zMin @cvt.04.zMax
+   25  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.05.zMin @cvt.05.zMax
+   26  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.06.zMin @cvt.06.zMax
+   27  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.07.zMin @cvt.07.zMax
+   28  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.08.zMin @cvt.08.zMax
+   29  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.09.zMin @cvt.09.zMax
+   30  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.10.zMin @cvt.10.zMax
+   31  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.11.zMin @cvt.11.zMax
+   32  rpp     @cvt.xMin @cvt.xMax @cvt.yMin @cvt.yMax @cvt.12.zMin @cvt.12.zMax
+
+   $$ -- thin target -- $$
+   $$[surfNum] [rpp] [xMin] [xMax] [yMin]    [yMax]    [zMin]       [zMax]       -- $
+   42  rcc     @quartTube.x0 @quartTube.y0 @quartTube.z0 @quartTube.dx @quartTube.dy @quartTube.dz @quartTube.radius
+   43  rcc     @quartAir.x0  @quartAir.y0  @quartAir.z0  @quartAir.dx  @quartAir.dy  @quartAir.dz  @quartAir.radius
+   44  rcc     @target.01.x0 @target.01.y0 @target.01.z0 @target.dx    @target.dy    @target.dz    @target.radius
+   45  rcc     @target.02.x0 @target.02.y0 @target.02.z0 @target.dx    @target.dy    @target.dz    @target.radius
+   46  rcc     @target.03.x0 @target.03.y0 @target.03.z0 @target.dx    @target.dy    @target.dz    @target.radius
+   47  rcc     @target.04.x0 @target.04.y0 @target.04.z0 @target.dx    @target.dy    @target.dz    @target.radius
+   48  rcc     @target.05.x0 @target.05.y0 @target.05.z0 @target.dx    @target.dy    @target.dz    @target.radius
+
+   $$ -- surrounding bbair -- $$
+   $$[surfNum] [rpp] [xMin]       [xMax]       [yMin]       [yMax]       [zMin]      [zMax]       -- $
+   51  rpp     @buff.xMin @buff.xMax @buff.yMin @buff.yMax @buff.zMin @buff.zMax
+
+   $$ -- boundary void region -- $$
+   $$[surfNum] [rpp]   [xMin]   [xMax]   [yMin]   [yMax]   [zMin]   [zMax]  -- $
+   61  rpp     @bb.xMin @bb.xMax @bb.yMin @bb.yMax @bb.zMin @bb.zMax
+
+
+[Cell]
+
+   $$ [cellNum] [matNum]      [Density]             [surfNums]
+   316 @cvt.m4.matN           @cvt.m4.matD          -16
+   317 @cvt.m3.matN           @cvt.m3.matD          -17
+   318 @cvt.m2.matN           @cvt.m2.matD          -18
+   319 @cvt.m1.matN           @cvt.m1.matD          -19
+   
+   321 @cvt.01.matN           @cvt.01.matD          -21
+   322 @cvt.02.matN           @cvt.02.matD          -22
+   323 @cvt.03.matN           @cvt.03.matD          -23
+   324 @cvt.04.matN           @cvt.04.matD          -24
+   325 @cvt.05.matN           @cvt.05.matD          -25
+   326 @cvt.06.matN           @cvt.06.matD          -26
+   327 @cvt.07.matN           @cvt.07.matD          -27
+   328 @cvt.08.matN           @cvt.08.matD          -28
+   329 @cvt.09.matN           @cvt.09.matD          -29
+   330 @cvt.10.matN           @cvt.10.matD          -30
+   331 @cvt.11.matN           @cvt.11.matD          -31
+   332 @cvt.12.matN           @cvt.12.matD          -32 +42
+   351 @Air.matNum            @Air.Density          -51 +16 +17 +18 +19 +21 +22 +23 +24 +25 +26 +27 +28 +29
+                                                    +30 +31 +32
+   361 @Air.matNum	          @Air.Density          -61 +51
+   301 -1                                           +61
+
+   $$ -- cup model case -- $$
+   $$ 341 @target.matNum         @target.Density       -41 :(-44 +45)
+   $$ 342 @SiO2.matNum           @SiO2.Density         -42 +43
+   $$ 343 @Air.matNum            @Air.Density          -43 +41 #(-44 +45)
+
+   $$ -- single disk model case -- $$
+   342 @SiO2.matNum           @SiO2.Density            -42 +43
+   343 @Air.matNum            @Air.Density             -43 +44
+   344 @target.matNum         @target.Density          -44
+   
+   $$ -- multi disk model case -- $$
+   $$ 342 @SiO2.matNum           @SiO2.Density            -42 +43
+   $$ 343 @Air.matNum            @Air.Density             -43 +44 +45 +46 +47 +48
+   $$ 344 @target.matNum         @target.01.Density       -44
+   $$ 345 @target.matNum         @target.02.Density       -45
+   $$ 346 @target.matNum         @target.03.Density       -46
+   $$ 347 @target.matNum         @target.04.Density       -47
+   $$ 348 @target.matNum         @target.05.Density       -48
+   
+
+   $$ <<other commands>>
+   $$ [cellNum]   [matNum] [Density]  [surfNums]  #<cellNum>      <- NOT operator !!
+   $$ [cellNum]   [matNum] [Density]  [surfNums]  #(<surfNum>)    <- USE () for surface num.
+   $$ [surfNum]   [sx/sy/sz] [radius] [z-pos]
+

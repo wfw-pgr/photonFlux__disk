@@ -1,0 +1,515 @@
+$$
+$$ ================================================================ $$
+$$ ===  PHITS input file   ( main_phits.inp )                   === $$
+$$ ================================================================ $$
+$$
+
+$$ ---   [NOTE]    --------------------------------------------------------------  $$
+$$ *                                                                            *  $$
+$$ * ( space >= 6 ): continuing line  (Error might occur with too many space.)  *  $$
+$$ *                                                                            *  $$
+$$ ------------------------------------------------------------------------------  $$
+
+$ <loadJSON> filepath = "inp/parameters.json"
+
+$$ ---   [Parallelization]    ---------------------------------------------------  $$
+$$ -- use $MPI=... / $OMP=...  -- $$
+$OMP=@OMP.nThreads
+$$ ------------------------------------------------------------------------------  $$
+
+
+
+$$ $ <include> filepath = inp/variables.def
+
+[Title]
+input file for radiation shieldings.
+
+[Parameters]
+  icntl     = 0                        $$ ( 0:transport, 6:check-source, 8:check-Geometry )
+  file(1)   = /mnt/c/kent/phits/build/phits/         $$
+  file(6)   = out/phits.out            $$ File Name of output
+  maxcas    = 1E+5                $$ #.of particles
+  maxbch    = 10                  $$ #.of batches
+  emin(12)  = 0.1                      $$ cut-off energy of electron to be transported. (MeV)
+                                       $$   ( if negs=1 ) Default :: 0.1 = 100keV
+                                       $$   ( if negs=0 ) Default :: 1e9 :: No e- transport
+                                       $$ if emin(12) is set, the value is prioritized.
+  emin(13)  = 0.1                      $$ cut-off energy of electron to be transported.
+  negs      = 1                        $$ transport of photon (+1/-1), electron(+1), off(0)
+  ipnint    = 1                        $$ p-n reaction ( 0:Off, 1:On, 2:w/ NRF(Full) )
+
+$ <include> filepath = inp/source_phits.inp
+
+$$ ================================================================= $$
+$$ ===  source                                                   === $$
+$$ ================================================================= $$
+
+[Source]
+
+    $$ ----------------------------------------------------------------- $$
+    $$ ---             pencil beam ( cylinder shape )                --- $$
+    $$ ----------------------------------------------------------------- $$
+    $$ s-type    =    1                    $$ ( 1:cylinder( pencil beam ) )
+    $$ totfact   = @beam.totfact
+    $$ proj      = electron
+    $$ dir       =  1.0
+    $$ r0        = @beam.HWHM
+    $$ z0        = @beam.zStart
+    $$ z1        = @beam.zEnd
+    $$ e0        = @beam.energy
+
+
+    $$ ----------------------------------------------------------------- $$
+    $$ ---         Gaussian beam ( Gaussian distribution )           --- $$
+    $$ ----------------------------------------------------------------- $$
+    s-type    =   13                    $$ ( 13:gaussian-xy )
+    totfact   = 1.24843945069E+15
+    proj      = electron
+    dir       =  1.0
+    r1        = 0.275
+    z0        = -1E+1
+    z1        = -11
+    e0        = 45
+
+
+    $$ ----------------------------------------------------------------- $$
+    $$ ---         Beam profile ( beam emittance )                   --- $$
+    $$ ----------------------------------------------------------------- $$
+    $$ s-type    =   11                    $$ ( 11: beam-profile-xy )
+    $$ totfact   = @beam.totfact
+    $$ proj      = electron
+    $$ dir       =  1.0
+    $$ z0        = @beam.zStart
+    $$ z1        = @beam.zEnd
+    $$ rx        = 0.0
+    $$ ry        = 0.0
+    $$ wem       = 0.0
+    $$ x1        = @beam.HWHM
+    $$ y1        = @beam.HWHM
+    $$ xmrad1    = 0.0
+    $$ ymrad1    = 0.0
+    $$ x2        = 0.0    
+    $$ y2        = 0.0    
+    $$ xmrad2    = 0.0
+    $$ ymrad2    = 0.0
+    $$ e0        = @beam.energy
+$ <include> filepath = inp/geometry_phits.inp
+
+$$ ========================================================== $$
+$$ ===       geometry_phits.inp                           === $$
+$$ ========================================================== $$
+$$
+[Surface]
+
+   $$ ------------------------------------------- $$
+   $$ --- [1] target system                    -- $$
+   $$ ------------------------------------------- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   21  rpp  -2.5 2.5 -2.5 2.5 -2.005 -2
+   22  rpp  -2.5 2.5 -2.5 2.5 -2 -0.6
+   23  rpp  -2.5 2.5 -2.5 2.5 -0.6 -0.5
+   24  rpp  -2.5 2.5 -2.5 2.5 -0.5 -0.35
+   25  rpp  -2.5 2.5 -2.5 2.5 -0.35 -0.25
+   26  rpp  -2.5 2.5 -2.5 2.5 -0.25 -0.1
+   27  rpp  -2.5 2.5 -2.5 2.5 -0.1 1.66533453694E-16
+   28  rpp  -2.5 2.5 -2.5 2.5 1.66533453694E-16 0.5
+   29  rpp  -2.5 2.5 -2.5 2.5 0.5 0.51
+   30  rpp  -2.5 2.5 -2.5 2.5 0.51 5.71
+
+   $$ ------------------------------------------- $$
+   $$ --- [2] irradiation target               -- $$
+   $$ ------------------------------------------- $$
+   $$ [surfNum] [rcc] [x0] [y0] [z0] [dx] [dy] [dz] [r0] -- $
+   41  rcc     0    0    2.7    0    0    4.9576295101E-7    0.5
+   42  rcc     0 0 2.6 0 0 2 0.6
+   43  rcc     0  0  2.7  0  0  1.8  0.5
+
+   $$ ------------------------------------------- $$
+   $$ --- [3] background air / boundary void   -- $$
+   $$ ------------------------------------------- $$
+   $$  --  background air     -- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   51  rpp     -3 3 -3 3 -2.505 6.21
+   
+   $$ -- boundary void region -- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   61  rpp     -5E+1 5E+1 -5E+1 5E+1 -5E+1 5E+1
+
+
+   $$ ------------------------------------------- $$
+   $$ --- [x] template of surface geometry     -- $$
+   $$ ------------------------------------------- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   $$ [surfNum] [rcc] [x0] [y0] [z0] [dx] [dy] [dz] [r0]         -- $
+
+
+[Cell]
+
+   $$ ------------------------------------------- $$
+   $$ --- [1] target system                    -- $$
+   $$ ------------------------------------------- $$
+
+   $$  [cellNum]  [matNum]  [Density]  [surfNums]
+   321 5      -4.51     -21
+   322 6      -0.000179     -22
+   323 7      -16.654     -23
+   324 2      -1     -24
+   325 7      -16.654     -25
+   326 2      -1     -26
+   327 7      -16.654     -27
+   328 1      -0.0012049     -28
+   329 8      -2.7     -29
+   330 1      -0.0012049     -30 +42
+
+   $$ ------------------------------------------- $$
+   $$ --- [2] irradiation target               -- $$
+   $$ ------------------------------------------- $$
+   341 3          -4.9        -41
+   342 4           -2.196         -42 +43
+   343 1            -0.0012049          -43 +41
+   
+   $$ ------------------------------------------- $$
+   $$ --- [3] background air / boundary void   -- $$
+   $$ ------------------------------------------- $$
+   351 1       -0.0012049     -51 +21 +22 +23 +24 +25 +26 +27 +28 +29 +30
+   361 1	     -0.0012049     -61 +51
+   301 -1                                 +61
+
+   $$ ------------------------------------------- $$
+   $$ --- [x] template of surface geometry     -- $$
+   $$ ------------------------------------------- $$
+   $$ [cellNum]   [matNum] [Density]  [surfNums]  #<cellNum>      <- NOT operator !!
+   $$ [cellNum]   [matNum] [Density]  [surfNums]  #(<surfNum>)    <- USE () for surface num.
+   $$ [surfNum]   [sx/sy/sz] [radius] [z-pos]
+
+$ <include> filepath = inp/materials_phits.inp
+
+$$ ================================================================= $$
+$$ ===                material_phits.inp (PHITS)                 === $$
+$$ ================================================================= $$
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                     Material Section                      --- $$
+$$ ----------------------------------------------------------------- $$
+
+[Material]
+
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                     matNum[1] :: Air                      --- $$
+$$ ----------------------------------------------------------------- $$
+
+$$ comment :: JAERI-Tech-96-001 <-- JAERI-M6928
+mat[1]
+    H          -1.00000e-03
+    C          -1.26000e-02
+    N          -7.55000e+01
+    O          -2.32000e+01
+
+$ <define> @Air.matNum                =          1
+$ <define> @Air.Density               = -0.0012049
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                     matNum[2] :: H2O                      --- $$
+$$ ----------------------------------------------------------------- $$
+
+mat[2]
+    H           2.00000e+00
+    O           1.00000e+00
+
+$ <define> @H2O.matNum                =          2
+$ <define> @H2O.Density               =       -1.0
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                    matNum[3] :: RaCl2                     --- $$
+$$ ----------------------------------------------------------------- $$
+
+mat[3]
+    226Ra       1.00000e+00
+    Cl          2.00000e+00
+
+$ <define> @RaCl2.matNum              =          3
+$ <define> @RaCl2.Density             =       -4.9
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                     matNum[4] :: SiO2                     --- $$
+$$ ----------------------------------------------------------------- $$
+
+$$ comment :: Quartz-Glass
+mat[4]
+    Si          1.00000e+00
+    O           2.00000e+00
+
+$ <define> @SiO2.matNum               =          4
+$ <define> @SiO2.Density              =     -2.196
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                      matNum[5] :: Ti                      --- $$
+$$ ----------------------------------------------------------------- $$
+
+$$ comment :: pure Titanium
+mat[5]
+    Ti          1.00000e+00
+
+$ <define> @Ti.matNum                 =          5
+$ <define> @Ti.Density                =      -4.51
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                      matNum[6] :: He                      --- $$
+$$ ----------------------------------------------------------------- $$
+
+mat[6]
+    He          1.00000e+00
+
+$ <define> @He.matNum                 =          6
+$ <define> @He.Density                =  -0.000179
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                      matNum[7] :: Ta                      --- $$
+$$ ----------------------------------------------------------------- $$
+
+$$ comment :: pure Tantal
+mat[7]
+    Ta          1.00000e+00
+
+$ <define> @Ta.matNum                 =          7
+$ <define> @Ta.Density                =    -16.654
+
+$$ ----------------------------------------------------------------- $$
+$$ ---                      matNum[8] :: Al                      --- $$
+$$ ----------------------------------------------------------------- $$
+
+$$ comment :: pure Aluminum
+mat[8]
+    Al          1.00000e+00
+
+$ <define> @Al.matNum                 =          8
+$ <define> @Al.Density                =       -2.7
+
+
+$$ ----------------------------------------------------------------- $$
+$$ ---               matNameColor section (PHITS)                --- $$
+$$ ----------------------------------------------------------------- $$
+
+[MatNameColor]
+    mat  name               size       color               
+    1    Air                2.0        cyan                
+    2    H2O                2.0        cyanblue            
+    3    RaCl2              2.0        violet              
+    4    SiO2               2.0        blue                
+    5    Ti                 2.0        darkred             
+    6    He                 2.0        pastelcyan          
+    7    Ta                 2.0        purple              
+    8    Al                 2.0        pink                
+$$ $ <include> filepath = inp/tally__fluence_phits.inp
+$$ $ <include> filepath = inp/tally__cross_phits.inp
+$ <include> filepath = inp/tally__checkGeometry_phits.inp
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- tally for geometry check ( target region )          ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$ -- window & conveter & housing & Ra-Target -- $$
+$$
+
+[T-Track]
+   mesh =  xyz          $$ mesh    :: [ xyz, r-z, reg, tet ]
+ x-type =    2          $$ x-type  :: [ 1: (nx,data[nx+1]), 2:(nx,xmin,xmax), 3:logarithmic ]
+     nx =   200
+   xmin =  -3 - 1
+   xmax =  3 + 1
+ y-type =    2
+     ny =    1
+   ymin =  -3 - 1
+   ymax =  3 + 1
+ z-type =    2
+     nz =   800
+   zmin =  -2.505 - 1
+   zmax =  6.21 + 1
+ e-type =    2
+     ne =    1
+   emin =  0.0
+   emax =  1.0e3
+   axis =   xz
+   file =  out/geometry_check_target.dat
+  title =  geometry of target region
+  gshow =    1
+ epsout =    1
+
+
+
+
+[End]
+
+$ <postProcess> for f in `ls out/*.eps`; do gs -dSAFER -dEPSCrop -sDEVICE=pdfwrite -o ${f%.eps}_%d.pdf ${f}; done
+$ <postProcess> mogrify -background white -alpha off -density 400 -resize 50%x50% -path png -format png out/*.pdf
+
+
+
+
+
+$$ ---   [NOTE]    --------------------------------------------------------------  $$
+$$ file(7) = c:/phits/data/xsdir.jnd    $$ nuclear data library :: xsdir
+$$ nspred    =  1
+$$ nucdata   =  1                       $$ nuetron's nuclear data library => 0:Off, 1:On
+$$ negs      =  1                       $$ transports of electron, photon, position ( default:-1 )
+                                       $$  -1: PHITS's original library ( photon )
+                                       $$   0: No Transport
+                                       $$  +1: EGS5 Library             ( photon, electron )
+$$ emcpf     = 20.0                     $$ upper limit of the detailed photon model
+$$ emin(12)  = 0.1     $ ==  1(keV)    $$ upr-limit of transport :: electron (MeV)
+$$ emin(13)  = 0.1     $ ==  1(keV)    $$ upr-limit of transport :: positron (MeV)
+$$ dmax(12)  = 1000.0                   $$ use of nuclear data ( emin(12) < energy < dmax(12) )
+$$ ------------------------------------------------------------------------------  $$
+
+
+
+$$ ==================================================================================== $$
+$$ ===                                variables List                                === $$
+$$ ==================================================================================== $$
+$$
+$$  name                           :   value                                             
+$$ ---------------------------------------------------------------------------------------
+$$                  @OMP.nThreads :                                                  4
+$$                     @nParticle :                                               1E+6
+$$                        @nBatch :                                                 10
+$$                      @nCascade :                                               1E+5
+$$                            @mm :                                                0.1
+$$                          @m2cm :                                               1E+2
+$$                          @cos0 :                                                  1
+$$                          @sin0 :                                                  0
+$$                            @pi :                                      3.14159265358
+$$                           @ln2 :                                      0.69314718056
+$$                     @NAvogadro :                                           6.02E+23
+$$               @target.activity :                                               5E+4
+$$               @target.halflife :                                        5.36112E+10
+$$                  @target.g_mol :                                                297
+$$                @target.Density :                                                4.9
+$$               @target.diameter :                                                  1
+$$                 @target.radius :                                                0.5
+$$               @target.distance :                                                2.7
+$$                   @target.Area :                                     0.785398163395
+$$                    @target.QTM :                                      7.9612632E+17
+$$                  @target.thick :                                    4.9576295101E-7
+$$               @quartTube.thick :                                                0.1
+$$              @quartTube.length :                                                  2
+$$               @bufferAir.thick :                                                0.5
+$$               @phits_directory :                     /mnt/c/kent/phits/build/phits/
+$$                  @phits_output :                                      out/phits.out
+$$                   @beam.energy :                                                 45
+$$                  @beam.current :                                             0.0002
+$$                     @beam.FWHM :                                               0.55
+$$                   @beam.zStart :                                              -1E+1
+$$                   @beam.length :                                                  1
+$$                  @beam.totfact :                                  1.24843945069E+15
+$$                     @beam.HWHM :                                              0.275
+$$                     @beam.zEnd :                                                -11
+$$                        @lyr.Lx :                                                  5
+$$                        @lyr.Ly :                                                  5
+$$                  @lyr.Ti.thick :                                              0.005
+$$                  @lyr.He.thick :                                                1.4
+$$                 @lyr.cvt.thick :                                                0.1
+$$                 @lyr.H2O.thick :                                               0.15
+$$             @lyr.airgap1.thick :                                                0.5
+$$             @lyr.housing.thick :                                               0.01
+$$             @lyr.airgap2.thick :                                                5.2
+$$                      @lyr.xMin :                                               -2.5
+$$                      @lyr.xMax :                                                2.5
+$$                      @lyr.yMin :                                               -2.5
+$$                      @lyr.yMax :                                                2.5
+$$                    @lyr.zstart :                                             -2.005
+$$                   @lyr.01.matN :                                         @Ti.matNum
+$$                   @lyr.01.matD :                                        @Ti.Density
+$$                   @lyr.01.zMin :                                             -2.005
+$$                   @lyr.01.zMax :                                                 -2
+$$                   @lyr.02.matN :                                         @He.matNum
+$$                   @lyr.02.matD :                                        @He.Density
+$$                   @lyr.02.zMin :                                                 -2
+$$                   @lyr.02.zMax :                                               -0.6
+$$                   @lyr.03.matN :                                         @Ta.matNum
+$$                   @lyr.03.matD :                                        @Ta.Density
+$$                   @lyr.03.zMin :                                               -0.6
+$$                   @lyr.03.zMax :                                               -0.5
+$$                   @lyr.04.matN :                                        @H2O.matNum
+$$                   @lyr.04.matD :                                       @H2O.Density
+$$                   @lyr.04.zMin :                                               -0.5
+$$                   @lyr.04.zMax :                                              -0.35
+$$                   @lyr.05.matN :                                         @Ta.matNum
+$$                   @lyr.05.matD :                                        @Ta.Density
+$$                   @lyr.05.zMin :                                              -0.35
+$$                   @lyr.05.zMax :                                              -0.25
+$$                   @lyr.06.matN :                                        @H2O.matNum
+$$                   @lyr.06.matD :                                       @H2O.Density
+$$                   @lyr.06.zMin :                                              -0.25
+$$                   @lyr.06.zMax :                                               -0.1
+$$                   @lyr.07.matN :                                         @Ta.matNum
+$$                   @lyr.07.matD :                                        @Ta.Density
+$$                   @lyr.07.zMin :                                               -0.1
+$$                   @lyr.07.zMax :                                  1.66533453694E-16
+$$                   @lyr.08.matN :                                        @Air.matNum
+$$                   @lyr.08.matD :                                       @Air.Density
+$$                   @lyr.08.zMin :                                  1.66533453694E-16
+$$                   @lyr.08.zMax :                                                0.5
+$$                   @lyr.09.matN :                                         @Al.matNum
+$$                   @lyr.09.matD :                                        @Al.Density
+$$                   @lyr.09.zMin :                                                0.5
+$$                   @lyr.09.zMax :                                               0.51
+$$                   @lyr.10.matN :                                        @Air.matNum
+$$                   @lyr.10.matD :                                       @Air.Density
+$$                   @lyr.10.zMin :                                               0.51
+$$                   @lyr.10.zMax :                                               5.71
+$$                     @target.x0 :                                                  0
+$$                     @target.y0 :                                                  0
+$$                     @target.z0 :                                                2.7
+$$                     @target.dx :                                                  0
+$$                     @target.dy :                                                  0
+$$                     @target.dz :                                    4.9576295101E-7
+$$              @quartTube.radius :                                                0.6
+$$                  @quartTube.x0 :                                                  0
+$$                  @quartTube.y0 :                                                  0
+$$                  @quartTube.z0 :                                                2.6
+$$                  @quartTube.dx :                                                  0
+$$                  @quartTube.dy :                                                  0
+$$                  @quartTube.dz :                                                  2
+$$               @quartAir.radius :                                                0.5
+$$               @quartAir.length :                                                1.8
+$$                   @quartAir.x0 :                                                  0
+$$                   @quartAir.y0 :                                                  0
+$$                   @quartAir.z0 :                                                2.7
+$$                   @quartAir.dx :                                                  0
+$$                   @quartAir.dy :                                                  0
+$$                   @quartAir.dz :                                                1.8
+$$                   @buff.margin :                                                0.5
+$$                     @buff.xMin :                                                 -3
+$$                     @buff.xMax :                                                  3
+$$                     @buff.yMin :                                                 -3
+$$                     @buff.yMax :                                                  3
+$$                     @buff.zMin :                                             -2.505
+$$                     @buff.zMax :                                               6.21
+$$                       @bb.xMin :                                              -5E+1
+$$                       @bb.xMax :                                               5E+1
+$$                       @bb.yMin :                                              -5E+1
+$$                       @bb.yMax :                                               5E+1
+$$                       @bb.zMin :                                              -5E+1
+$$                       @bb.zMax :                                               5E+1
+$$                @tally.particle :  (photon electron neutron) neutron electron photon
+$$                   @tally.space :                                                  1
+$$                    @tally.zMin :                                                 -2
+$$                    @tally.zMax :                                                  8
+$$                    @Air.matNum :                                                  1
+$$                   @Air.Density :                                         -0.0012049
+$$                    @H2O.matNum :                                                  2
+$$                   @H2O.Density :                                                 -1
+$$                  @RaCl2.matNum :                                                  3
+$$                 @RaCl2.Density :                                               -4.9
+$$                   @SiO2.matNum :                                                  4
+$$                  @SiO2.Density :                                             -2.196
+$$                     @Ti.matNum :                                                  5
+$$                    @Ti.Density :                                              -4.51
+$$                     @He.matNum :                                                  6
+$$                    @He.Density :                                          -0.000179
+$$                     @Ta.matNum :                                                  7
+$$                    @Ta.Density :                                            -16.654
+$$                     @Al.matNum :                                                  8
+$$                    @Al.Density :                                               -2.7
+$$ ---------------------------------------------------------------------------------------

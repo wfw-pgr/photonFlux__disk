@@ -1,0 +1,203 @@
+{
+    
+    // ---------------------------------------------- //
+    // ---  Parameters Section                   ---- //
+    // ---------------------------------------------- //
+    "OMP.nThreads"      : 4,
+    "nParticle"         : 1.0e6,
+    "nBatch"            : 10,
+    "nCascade"          : "@nParticle/@nBatch",
+    
+    "mm"                : 0.1,
+    "m2cm"              : 100.0,
+    "cos0"              : 1.0,
+    "sin0"              : 0.0,
+    "pi"                : 3.14159265358,
+    "ln2"               : 0.69314718056,
+    "NAvogadro"         : 6.02e23,
+    
+    "target.activity"   : 50.0e3,                        // -- [Bq]    --- //
+    "target.halflife"   : "1700.0*365.0*24.0*3600",      // -- [s]     --- //
+    "target.g_mol"      : 297.0,                         // -- [g/mol] --- //
+    
+    "target.Density"    : 4.9,
+    "target.diameter"   : "10.0 * @mm",
+    "target.radius"     : "0.50 * @target.diameter",
+    "target.distance"   : "27.0 * @mm",
+
+    "target.Area"       : "0.25 * @pi * ( @target.diameter )*( @target.diameter )" ,
+    "target.QTM"        : "@target.activity * @target.halflife * @target.g_mol",
+    "target.thick"      : "@target.QTM / ( @ln2 * @NAvogadro * @target.Density * @target.Area )",
+
+    "quartTube.thick"   : "1.0*@mm",
+    "quartTube.length"  : "20.0*@mm",
+
+    "bufferAir.thick"   : "5.0*@mm",
+
+
+    "phits_directory"   : "/mnt/c/phits/build_phits328A/phits/",  // Directory of PHITS  // 133.144.160.74
+    "phits_directory"   : "/mnt/e/nishida/phits/build/phits/",    // Directory of PHITS  // 133.144.160.159
+    "phits_directory"   : "/mnt/c/kent/phits/build/phits/",       // Directory of PHITS  // 133.144.160.73
+    "phits_output"      : "out/phits.out", 
+
+
+    // ---------------------------------------------- //
+    // ---  source part :: beam settings         ---- //
+    // ---------------------------------------------- //
+
+    "beam.energy"       : 45.0,
+    "beam.current"      : 200e-6,
+    "beam.FWHM"         : "   5.5 * @mm",
+    "beam.zStart"       : "-100.0 * @mm",
+    "beam.length"       : "  10.0 * @mm",
+
+    "beam.totfact"      : "@beam.current / 1.602e-19",              // -- unit :: [ particles / s ] -- //
+    "beam.HWHM"         : "0.5 * @beam.FWHM",
+    "beam.zEnd"         : "@beam.zStart - @beam.length",
+
+
+    // ---------------------------------------------- //
+    // ---  Geometry part                        ---- //
+    // ---------------------------------------------- //
+
+    // --------------------------- //
+    // -- convertor             -- //
+    // --------------------------- //
+    "lyr.Lx"            : "50.0 * @mm",
+    "lyr.Ly"            : "50.0 * @mm",
+    "lyr.Ti.thick"      : "0.05 * @mm",
+    "lyr.He.thick"      : "14.0 * @mm",
+    "lyr.cvt.thick"     : "1.0  * @mm",
+    "lyr.H2O.thick"     : "1.5  * @mm",
+    "lyr.airgap1.thick" : "5.0  * @mm",
+    "lyr.housing.thick" : "0.1  * @mm",
+    "lyr.airgap2.thick" : "( @target.distance - @lyr.airgap1.thick + @quartTube.length + 10.0*@mm )",
+
+    "lyr.xMin"          : "(-0.5) * @lyr.Lx",
+    "lyr.xMax"          : "(+0.5) * @lyr.Lx",
+    "lyr.yMin"          : "(-0.5) * @lyr.Ly",
+    "lyr.yMax"          : "(+0.5) * @lyr.Ly",
+    "lyr.zstart"        : "-1.0*( @lyr.Ti.thick + @lyr.He.thick + 3.0*@lyr.cvt.thick + 2.0*@lyr.H2O.thick )",
+
+    // -- [01]  Ti   0.05 mm   -- //
+    "lyr.01.matN"       : "@Ti.matNum",
+    "lyr.01.matD"       : "@Ti.Density",
+    "lyr.01.zMin"       : "@lyr.zstart",
+    "lyr.01.zMax"       : "@lyr.01.zMin + @lyr.Ti.thick",
+
+    // -- [02]  He     14 mm   -- //
+    "lyr.02.matN"       : "@He.matNum",
+    "lyr.02.matD"       : "@He.Density",
+    "lyr.02.zMin"       : "@lyr.01.zMax",
+    "lyr.02.zMax"       : "@lyr.02.zMin + @lyr.He.thick",
+
+    // -- [03]  Ta(1)    1.0 mm   -- //
+    "lyr.03.matN"       : "@Ta.matNum",
+    "lyr.03.matD"       : "@Ta.Density",
+    "lyr.03.zMin"       : "@lyr.02.zMax",
+    "lyr.03.zMax"       : "@lyr.03.zMin + @lyr.cvt.thick",
+
+    // -- [04]  H2O      1.5 mm   -- //
+    "lyr.04.matN"       : "@H2O.matNum",
+    "lyr.04.matD"       : "@H2O.Density",
+    "lyr.04.zMin"       : "@lyr.03.zMax",
+    "lyr.04.zMax"       : "@lyr.04.zMin + @lyr.H2O.thick",
+
+    // -- [05]  Ta(2)    1.5 mm   -- //
+    "lyr.05.matN"       : "@Ta.matNum",
+    "lyr.05.matD"       : "@Ta.Density",
+    "lyr.05.zMin"       : "@lyr.04.zMax",
+    "lyr.05.zMax"       : "@lyr.05.zMin + @lyr.cvt.thick",
+
+    // -- [06]  H2O      1.5 mm   -- //
+    "lyr.06.matN"       : "@H2O.matNum",
+    "lyr.06.matD"       : "@H2O.Density",
+    "lyr.06.zMin"       : "@lyr.05.zMax",
+    "lyr.06.zMax"       : "@lyr.06.zMin + @lyr.H2O.thick",
+
+    // -- [07]  Ta(3)    1.5 mm   -- //
+    "lyr.07.matN"       : "@Ta.matNum",
+    "lyr.07.matD"       : "@Ta.Density",
+    "lyr.07.zMin"       : "@lyr.06.zMax",
+    "lyr.07.zMax"       : "@lyr.07.zMin + @lyr.cvt.thick",
+
+    // -- [08]  air      5.0 mm   -- //
+    "lyr.08.matN"       : "@Air.matNum",
+    "lyr.08.matD"       : "@Air.Density",
+    "lyr.08.zMin"       : "@lyr.07.zMax",
+    "lyr.08.zMax"       : "@lyr.08.zMin + @lyr.airgap1.thick",
+
+    // -- [09]  Housing 0.1 mm  -- //
+    "lyr.09.matN"       : "@Al.matNum",
+    "lyr.09.matD"       : "@Al.Density",
+    "lyr.09.zMin"       : "@lyr.08.zMax",
+    "lyr.09.zMax"       : "@lyr.09.zMin + @lyr.housing.thick",
+
+    // -- [10]  air             -- //
+    "lyr.10.matN"       : "@Air.matNum",
+    "lyr.10.matD"       : "@Air.Density",
+    "lyr.10.zMin"       : "@lyr.09.zMax",
+    "lyr.10.zMax"       : "@lyr.10.zMin + @lyr.airgap2.thick",
+
+
+    // --------------------------- //
+    // -- target                -- //
+    // --------------------------- //
+    "target.x0"         : 0.0,
+    "target.y0"         : 0.0,
+    "target.z0"         : "@lyr.07.zMax + @target.distance", // distance from the last convertor plate,
+    "target.dx"         : "@sin0*@target.thick",
+    "target.dy"         : 0.0,
+    "target.dz"         : "@cos0*@target.thick",
+
+    // --------------------------- //
+    // -- quart tube            -- //
+    // --------------------------- //
+    "quartTube.radius"  : "@quartTube.thick + @target.radius",
+    "quartTube.x0"      : "@target.x0 - @quartTube.thick*@sin0",
+    "quartTube.y0"      : 0.0,
+    "quartTube.z0"      : "@target.z0 - @quartTube.thick*@cos0",
+    "quartTube.dx"      : "@quartTube.length*@sin0",
+    "quartTube.dy"      : 0.0,
+    "quartTube.dz"      : "@quartTube.length*@cos0",
+
+    "quartAir.radius"   : "@target.radius",
+    "quartAir.length"   : "@quartTube.length - ( 2.0*@quartTube.thick )",
+    "quartAir.x0"       : "@target.x0",
+    "quartAir.y0"       : 0.0,
+    "quartAir.z0"       : "@target.z0",
+    "quartAir.dx"       : "@quartAir.length*@sin0",
+    "quartAir.dy"       : 0.0,
+    "quartAir.dz"       : "@quartAir.length*@cos0",
+
+    // --------------------------- //
+    // -- buffer air            -- //
+    // --------------------------- //
+    "buff.margin"       : "5.0 * @mm",
+    "buff.xMin"         : "@lyr.xMin    - @buff.margin",
+    "buff.xMax"         : "@lyr.xMax    + @buff.margin",
+    "buff.yMin"         : "@lyr.yMin    - @buff.margin",
+    "buff.yMax"         : "@lyr.xMax    + @buff.margin",
+    "buff.zMin"         : "@lyr.01.zMin - @buff.margin",
+    "buff.zMax"         : "@lyr.10.zMax + @buff.margin",
+
+
+    // ---------------------------------------------- //
+    // ---  Bounding Box part                    ---- //
+    // ---------------------------------------------- //
+    "bb.xMin"           : "-500.0 * @mm",
+    "bb.xMax"           : "+500.0 * @mm",
+    "bb.yMin"           : "-500.0 * @mm",
+    "bb.yMax"           : "+500.0 * @mm",
+    "bb.zMin"           : "-500.0 * @mm",
+    "bb.zMax"           : "+500.0 * @mm",
+
+    // ---------------------------------------------- //
+    // ---  tally part                           ---- //
+    // ---------------------------------------------- //
+    "tally.particle"    : " (photon electron neutron) neutron electron photon",
+    "tally.space"       : " 10.0 * @mm",
+    "tally.zMin"        : "-20.0 * @mm",
+    "tally.zMax"        : "+80.0 * @mm",
+
+}

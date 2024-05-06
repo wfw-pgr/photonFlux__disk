@@ -1,0 +1,58 @@
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- [1] tally for fluence calculation (single disk)     ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$
+
+[T-Track]
+   mesh =  reg          $$ mesh    :: [ xyz, r-z, reg, tet ]
+    reg =  344          $$ region number :: 
+    volume
+     reg     vol
+     344     1.0
+ e-type =    2
+     ne =  100
+   emin =  0.0
+   emax =  50.0
+   part =  photon
+   unit =    2           $$ unit is [1/cm^2/MeV/source]
+   axis =  eng
+   file =  out/tally__fluence_eng.dat
+  x-txt =  energy [MeV]
+  y-txt =  track length [photons m/MeV/s]
+ epsout =    1
+
+
+
+
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- [2] tally for fluence calculation  (multi disk)     ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$
+
+$$ [T-Track]
+$$    mesh =  reg          $$ mesh    :: [ xyz, r-z, reg, tet ]
+$$     reg =  344 345 346 347 348     $$ region number :: 
+$$     volume
+$$      reg     vol
+$$      344     1.0
+$$      345     1.0
+$$      346     1.0
+$$      347     1.0
+$$      348     1.0
+$$  e-type =    2
+$$      ne =  100
+$$    emin =  0.0
+$$    emax =  50.0
+$$    part =  photon
+$$    unit =    2           $$ unit is [1/cm^2/MeV/source]
+$$    axis =  eng
+$$    file =  out/tally__fluence_eng.dat
+$$   x-txt =  energy [MeV]
+$$   y-txt =  track length [photons m/MeV/s]
+$$  epsout =    1
+
+

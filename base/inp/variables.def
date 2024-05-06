@@ -1,0 +1,264 @@
+
+$$$ ---------------------------------------------- $$$
+$$$ ---  Parameters Section                   ---- $$$
+$$$ ---------------------------------------------- $$$
+
+$ <define> @nParticle          = 1.0e5
+$ <define> @nBatch             = 10
+$ <define> @nCascade           = @nParticle / @nBatch
+
+$ <define> @mm                 = 0.1
+$ <define> @m2cm               = 100.0
+$ <define> @cos70              = 0.3420201433256688
+$ <define> @sin70              = 0.9396926207859083
+
+$ <define> @target.L           =  2.0 * @mm     $$   specify,  L > t  ( L=t is also error. )
+$ <define> @target.t           =  0.035148 * @mm
+$ <define> @target.volume      =  8.79521079e-04    $$ unit = mm^3
+$ <define> @target.matNum      =  @Au.matNum
+$ <define> @target.Density     =  @Au.Density
+$ <define> @target.diameter    =  3.0 * @mm
+$ <define> @target.radius      =  0.5 * @target.diameter
+
+$ <define> @target.01.Density  = 3.30e-04
+$ <define> @target.02.Density  = 1.87e-04
+$ <define> @target.03.Density  = 3.80e-05
+$ <define> @target.04.Density  = 8.77e-05
+$ <define> @target.05.Density  = 5.26e-05
+
+$ <define> @quartTube.thick    =  1.0 * @mm
+$ <define> @quartTube.length   = 12.0 * @mm
+
+$ <define> @bufferAir.thick    = 5.0  * @mm
+
+
+$ <define> @phits_directory = /Users/kent/phits/build/phits    $$ maxwell
+
+$$ $ <define> @phits_directory = /mnt/c/phits/build_phits328A/phits/    $$ Directory of PHITS  // 133
+.144.160.74
+$$ $ <define> @phits_directory = /mnt/e/nishida/phits/build/phits/      $$ Directory of PHITS  // 133.144.160.159
+$$ $ <define> @phits_directory = /mnt/c/kent/phits/build/phits/         $$ Directory of PHITS  // 133.144.160.73
+
+$$$ ---------------------------------------------- $$$
+$$$ ---  source part :: beam settings         ---- $$$
+$$$ ---------------------------------------------- $$$
+
+$ <define> @beam.energy    = 45.0
+$ <define> @beam.current   = 200e-6
+$ <define> @beam.FWHM      = 5.5 * @mm
+$ <define> @beam.zFront    = -110.0 * @mm
+$ <define> @beam.freq      = 2.856e9
+$ <define> @beam.velocity  = 0.999 * 3.0e8         $$ [m/s]
+
+$ <define> @beam.length    = @beam.velocity / @beam.freq  * @m2cm   $$ [cm]
+
+$ <define> @beam.totfact   = @beam.current / 1.602e-19              $$ -- unit :: [ particles / s ] -- $$
+$ <define> @beam.HWHM      = 0.5 * @beam.FWHM
+$ <define> @beam.zStart    = @beam.zFront - @beam.length
+$ <define> @beam.zEnd      = @beam.zFront
+
+
+$$$ ---------------------------------------------- $$$
+$$$ ---  Geometry part                        ---- $$$
+$$$ ---------------------------------------------- $$$
+
+$$ --------------------------- $$
+$$ -- convertor             -- $$
+$$ --------------------------- $$
+$ <define> @cvt.zstart         = 0.0
+$ <define> @cvt.Lx             = 50.0* @mm
+$ <define> @cvt.Ly             = 50.0* @mm
+$ <define> @cvt.SUS316.thick   = 0.5 * @mm
+$ <define> @cvt.H2O.thick      = 1.5 * @mm
+$ <define> @cvt.target.thick   = 1.0 * @mm
+$ <define> @cvt.airgap1.thick  = 3.0 * @mm
+$ <define> @cvt.housing.thick  = 0.1 * @mm
+$ <define> @cvt.airgap2.thick  = 4.9 * @mm
+$ <define> @cvt.airgap2.maxLen = @cvt.airgap2.thick + ( @cos70*@quartTube.length + @sin70*(@quartTube.thick+@target.radius) )*1.2
+
+$ <define> @cvt.airgap0.thick = 81.9 * @mm
+$ <define> @cvt.Ti.thick      = 0.05 * @mm
+$ <define> @cvt.He.thick      = 14.0 * @mm
+
+$ <define> @cvt.xMin     = (-0.5) * @cvt.Lx
+$ <define> @cvt.xMax     = (+0.5) * @cvt.Lx
+$ <define> @cvt.yMin     = (-0.5) * @cvt.Ly
+$ <define> @cvt.yMax     = (+0.5) * @cvt.Ly
+
+
+$$ -- [-1]  Air   81.9 mm   -- $$
+$ <define> @cvt.m1.matN  = @Air.matNum
+$ <define> @cvt.m1.matD  = @Air.Density
+$ <define> @cvt.m1.zMin  = @cvt.zstart  - @cvt.airgap0.thick
+$ <define> @cvt.m1.zMax  = @cvt.zstart
+
+$$ -- [-2]  Ti   50.0 um   -- $$
+$ <define> @cvt.m2.matN  = @Ti.matNum
+$ <define> @cvt.m2.matD  = @Ti.Density
+$ <define> @cvt.m2.zMin  = @cvt.m1.zMin - @cvt.Ti.thick
+$ <define> @cvt.m2.zMax  = @cvt.m1.zMin
+
+$$ -- [-3]  He   14.0 mm   -- $$
+$ <define> @cvt.m3.matN  = @He.matNum
+$ <define> @cvt.m3.matD  = @He.Density
+$ <define> @cvt.m3.zMin  = @cvt.m2.zMin  - @cvt.He.thick
+$ <define> @cvt.m3.zMax  = @cvt.m2.zMin
+
+$$ -- [-4]  Ti   50.0 um   -- $$
+$ <define> @cvt.m4.matN  = @Ti.matNum
+$ <define> @cvt.m4.matD  = @Ti.Density
+$ <define> @cvt.m4.zMin  = @cvt.m3.zMin - @cvt.Ti.thick
+$ <define> @cvt.m4.zMax  = @cvt.m3.zMin
+
+$$ -- [01]  SUS316   0.5 mm   -- $$
+$ <define> @cvt.01.matN  = @SUS316.matNum
+$ <define> @cvt.01.matD  = @SUS316.Density
+$ <define> @cvt.01.zMin  = @cvt.zstart
+$ <define> @cvt.01.zMax  = @cvt.01.zMin + @cvt.SUS316.thick
+
+$$ -- [02]  H2O      1.5 mm   -- $$
+$ <define> @cvt.02.matN  = @H2O.matNum
+$ <define> @cvt.02.matD  = @H2O.Density
+$ <define> @cvt.02.zMin  = @cvt.01.zMax
+$ <define> @cvt.02.zMax  = @cvt.02.zMin + @cvt.H2O.thick
+
+$$ -- [03]  Pt(1)    1.0 mm   -- $$
+$ <define> @cvt.03.matN  = @Pt.matNum
+$ <define> @cvt.03.matD  = @Pt.Density
+$ <define> @cvt.03.zMin  = @cvt.02.zMax
+$ <define> @cvt.03.zMax  = @cvt.03.zMin + @cvt.target.thick
+
+$$ -- [04]  H2O      1.5 mm   -- $$
+$ <define> @cvt.04.matN  = @H2O.matNum
+$ <define> @cvt.04.matD  = @H2O.Density
+$ <define> @cvt.04.zMin  = @cvt.03.zMax
+$ <define> @cvt.04.zMax  = @cvt.04.zMin + @cvt.H2O.thick
+
+$$ -- [05]  Pt(2)    1.5 mm   -- $$
+$ <define> @cvt.05.matN  = @Pt.matNum
+$ <define> @cvt.05.matD  = @Pt.Density
+$ <define> @cvt.05.zMin  = @cvt.04.zMax
+$ <define> @cvt.05.zMax  = @cvt.05.zMin + @cvt.target.thick
+
+$$ -- [06]  H2O      1.5 mm   -- $$
+$ <define> @cvt.06.matN  = @H2O.matNum
+$ <define> @cvt.06.matD  = @H2O.Density
+$ <define> @cvt.06.zMin  = @cvt.05.zMax
+$ <define> @cvt.06.zMax  = @cvt.06.zMin + @cvt.H2O.thick
+
+$$ -- [07]  Pt(3)    1.5 mm   -- $$
+$ <define> @cvt.07.matN  = @Pt.matNum
+$ <define> @cvt.07.matD  = @Pt.Density
+$ <define> @cvt.07.zMin  = @cvt.06.zMax
+$ <define> @cvt.07.zMax  = @cvt.07.zMin + @cvt.target.thick
+
+$$ -- [08]  H2O      1.5 mm   -- $$
+$ <define> @cvt.08.matN  = @H2O.matNum
+$ <define> @cvt.08.matD  = @H2O.Density
+$ <define> @cvt.08.zMin  = @cvt.07.zMax
+$ <define> @cvt.08.zMax  = @cvt.08.zMin + @cvt.H2O.thick
+
+$$ -- [09]  SUS316   0.5 mm   -- $$
+$ <define> @cvt.09.matN  = @SUS316.matNum
+$ <define> @cvt.09.matD  = @SUS316.Density
+$ <define> @cvt.09.zMin  = @cvt.08.zMax
+$ <define> @cvt.09.zMax  = @cvt.09.zMin + @cvt.SUS316.thick
+
+$$ -- [10]  air      3.0 mm   -- $$
+$ <define> @cvt.10.matN  = @Air.matNum
+$ <define> @cvt.10.matD  = @Air.Density
+$ <define> @cvt.10.zMin  = @cvt.09.zMax
+$ <define> @cvt.10.zMax  = @cvt.10.zMin + @cvt.airgap1.thick
+
+$$ -- [11]  Hastelloy 0.1 mm  -- $$
+$ <define> @cvt.11.matN   = @Hastelloy.matNum
+$ <define> @cvt.11.matD   = @Hastelloy.Density
+$ <define> @cvt.11.zMin   = @cvt.10.zMax
+$ <define> @cvt.11.zMax   = @cvt.11.zMin + @cvt.housing.thick
+
+$$ -- [12]  air       4.9 mm  -- $$
+$ <define> @cvt.12.matN   = @Air.matNum
+$ <define> @cvt.12.matD   = @Air.Density
+$ <define> @cvt.12.zMin   = @cvt.11.zMax
+$ <define> @cvt.12.zMax   = @cvt.12.zMin + @cvt.airgap2.maxLen
+
+$$ --------------------------- $$
+$$ -- target                -- $$
+$$ --------------------------- $$
+$ <define> @target.x0        = 0.0
+$ <define> @target.y0        = 0.0
+$ <define> @target.z0        = @cvt.12.zMin + @cvt.airgap2.thick 
+$ <define> @target.dx        = @sin70*@target.t
+$ <define> @target.dy        = 0.0
+$ <define> @target.dz        = @cos70*@target.t
+
+$ <define> @target.01.x0     = @target.x0
+$ <define> @target.01.y0     = @target.y0
+$ <define> @target.01.z0     = @target.z0
+
+$ <define> @target.02.x0     = @target.01.x0 + @target.dx
+$ <define> @target.02.y0     = @target.01.y0 + @target.dy
+$ <define> @target.02.z0     = @target.01.z0 + @target.dz
+
+$ <define> @target.03.x0     = @target.02.x0 + @target.dx
+$ <define> @target.03.y0     = @target.02.y0 + @target.dy
+$ <define> @target.03.z0     = @target.02.z0 + @target.dz
+
+$ <define> @target.04.x0     = @target.03.x0 + @target.dx
+$ <define> @target.04.y0     = @target.03.y0 + @target.dy
+$ <define> @target.04.z0     = @target.03.z0 + @target.dz
+
+$ <define> @target.05.x0     = @target.04.x0 + @target.dx
+$ <define> @target.05.y0     = @target.04.y0 + @target.dy
+$ <define> @target.05.z0     = @target.04.z0 + @target.dz
+
+
+$$ --------------------------- $$
+$$ -- quart tube            -- $$
+$$ --------------------------- $$
+$ <define> @quartTube.radius = @quartTube.thick + @target.radius
+$ <define> @quartTube.x0     = @target.x0 - @quartTube.thick*@sin70
+$ <define> @quartTube.y0     = 0.0
+$ <define> @quartTube.z0     = @target.z0 - @quartTube.thick*@cos70
+$ <define> @quartTube.dx     = @quartTube.length*@sin70
+$ <define> @quartTube.dy     = 0.0
+$ <define> @quartTube.dz     = @quartTube.length*@cos70
+
+$ <define> @quartAir.radius  = @target.radius
+$ <define> @quartAir.length  = @quartTube.length - ( 2.0*@quartTube.thick )
+$ <define> @quartAir.x0      = @target.x0
+$ <define> @quartAir.y0      = 0.0
+$ <define> @quartAir.z0      = @target.z0
+$ <define> @quartAir.dx      = @quartAir.length*@sin70
+$ <define> @quartAir.dy      = 0.0
+$ <define> @quartAir.dz      = @quartAir.length*@cos70
+
+$$ --------------------------- $$
+$$ -- buffer air            -- $$
+$$ --------------------------- $$
+$ <define> @buff.margin   = 3.0 * @mm
+$ <define> @buff.xMin     = @cvt.xMin  - @buff.margin
+$ <define> @buff.xMax     = @cvt.xMax  + @buff.margin
+$ <define> @buff.yMin     = @cvt.yMin  - @buff.margin
+$ <define> @buff.yMax     = @cvt.xMax  + @buff.margin
+$ <define> @buff.zMin     = @cvt.m4.zMin - @buff.margin
+$ <define> @buff.zMax     = @target.z0 + @quartTube.length + @buff.margin
+
+
+$$$ ---------------------------------------------- $$$
+$$$ ---  Bounding Box part                    ---- $$$
+$$$ ---------------------------------------------- $$$
+$ <define> @bb.xMin     = -500.0 * @mm
+$ <define> @bb.xMax     = +500.0 * @mm
+$ <define> @bb.yMin     = -500.0 * @mm
+$ <define> @bb.yMax     = +500.0 * @mm
+$ <define> @bb.zMin     = -500.0 * @mm
+$ <define> @bb.zMax     = +500.0 * @mm
+
+$$$ ---------------------------------------------- $$$
+$$$ ---  tally part                           ---- $$$
+$$$ ---------------------------------------------- $$$
+$ <define> @tally.particle =  (photon electron neutron) neutron electron photon 
+$ <define> @tally.space    =  10.0 * @mm
+$ <define> @tally.zMin     = -20.0 * @mm
+$ <define> @tally.zMax     = +80.0 * @mm

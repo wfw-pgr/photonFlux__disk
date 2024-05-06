@@ -1,0 +1,237 @@
+{
+  "Air": {
+    "Name": "Air",
+    "MaterialNumber": 1,
+    "Density": -0.0012049,
+    "CharacterSize": 2,
+    "Color": "cyan",
+    "Comment": "JAERI-Tech-96-001 <-- JAERI-M6928",
+    "Composition": {
+      "H": -0.001,
+      "C": -0.0126,
+      "N": -75.5,
+      "O": -23.2
+    }
+  },
+  "H2O": {
+    "Name": "H2O",
+    "MaterialNumber": 2,
+    "Density": -1.0,
+    "CharacterSize": 2,
+    "Color": "cyanblue",
+    "Comment": "",
+    "Composition": {
+      "H": 2.0,
+      "O": 1.0
+    }
+  },
+  "Concrete": {
+    "Name": "Concrete",
+    "MaterialNumber": 3,
+    "Density": -2.1,
+    "CharacterSize": 2,
+    "Color": "grey",
+    "Comment": "Shahei-Keisan-Jitsumu-Manual-2007",
+    "Composition": {
+      "H": -0.0103,
+      "C": -0.001,
+      "O": -0.5446,
+      "Mg": -0.0022,
+      "Al": -0.0348,
+      "Si": -0.34600000000000003,
+      "Ca": -0.0446,
+      "Fe": -0.0143
+    }
+  },
+  "Polyethylen": {
+    "Name": "Polyethylen",
+    "MaterialNumber": 4,
+    "Density": -0.87,
+    "CharacterSize": 2,
+    "Color": "yellowgreen",
+    "Comment": "JAERI-Tech-96-001",
+    "Composition": {
+      "H": 2.0,
+      "C": 1.0
+    }
+  },
+  "Fe": {
+    "Name": "Fe",
+    "MaterialNumber": 5,
+    "Density": -7.86,
+    "CharacterSize": 2,
+    "Color": "red",
+    "Comment": "",
+    "Composition": {
+      "Fe": 1.0
+    }
+  },
+  "SS400": {
+    "Name": "SS400",
+    "MaterialNumber": 6,
+    "Density": -7.85,
+    "CharacterSize": 2,
+    "Color": "red",
+    "Comment": "Structure Steel 400 N/m2",
+    "Composition": {
+      "Fe": -0.996,
+      "Si": -0.002,
+      "C": -0.0013,
+      "S": -0.00025,
+      "P": -0.0002
+    }
+  },
+  "SUS316": {
+    "Name": "SUS316",
+    "MaterialNumber": 7,
+    "Density": -7.98,
+    "CharacterSize": 2,
+    "Color": "red",
+    "Comment": "Stainless Steel",
+    "Composition": {
+      "Fe": -0.669,
+      "C": -0.0004,
+      "Si": -0.00015,
+      "Mn": -0.01,
+      "P": -0.000225,
+      "Ni": -0.12,
+      "Cr": -0.17,
+      "Mo": -0.025
+    }
+  },
+  "Al": {
+    "Name": "Al",
+    "MaterialNumber": 8,
+    "Density": -2.7,
+    "CharacterSize": 2,
+    "Color": "pink",
+    "Comment": "pure Aluminum",
+    "Composition": {
+      "Al": 1.0
+    }
+  },
+  "Pb": {
+    "Name": "Pb",
+    "MaterialNumber": 9,
+    "Density": -11.34,
+    "CharacterSize": 2,
+    "Color": "orange",
+    "Comment": "pure Lead",
+    "Composition": {
+      "Pb": 1.0
+    }
+  },
+  "Ti": {
+    "Name": "Ti",
+    "MaterialNumber": 10,
+    "Density": -4.51,
+    "CharacterSize": 2,
+    "Color": "darkred",
+    "Comment": "pure Titanium",
+    "Composition": {
+      "Ti": 1.0
+    }
+  },
+  "Ta": {
+    "Name": "Ta",
+    "MaterialNumber": 11,
+    "Density": -16.654,
+    "CharacterSize": 2,
+    "Color": "purple",
+    "Comment": "pure Tantal",
+    "Composition": {
+      "Ta": 1.0
+    }
+  },
+  "Ra": {
+    "Name": "Ra",
+    "MaterialNumber": 12,
+    "Density": -5.5,
+    "CharacterSize": 2,
+    "Color": "violet",
+    "Comment": "pure Radium",
+    "Composition": {
+      "226Ra": 1.0
+    }
+  },
+  "He": {
+    "Name": "He",
+    "MaterialNumber": 13,
+    "Density": -0.00017900000000000001,
+    "CharacterSize": 2,
+    "Color": "pastelcyan",
+    "Comment": "",
+    "Composition": {
+      "He": 1.0
+    }
+  },
+  "N": {
+    "Name": "N",
+    "MaterialNumber": 14,
+    "Density": -0.00125,
+    "CharacterSize": 2,
+    "Color": "pastelgreen",
+    "Comment": "",
+    "Composition": {
+      "N": 1.0
+    }
+  },
+  "Quartz-Glass": {
+    "Name": "Quartz-Glass",
+    "MaterialNumber": 15,
+    "Density": -2.1959999999999997,
+    "CharacterSize": 2,
+    "Color": "blue",
+    "Comment": "",
+    "Composition": {
+      "Si": 1.0,
+      "O": 2.0
+    }
+  },
+  "Soil": {
+    "Name": "Soil",
+    "MaterialNumber": 16,
+    "Density": -1.52,
+    "CharacterSize": 2,
+    "Color": "brown",
+    "Comment": "Houshasen-Shahei-Handbook-Kisohen <-- JAERI-M8171",
+    "Composition": {
+      "H": 0.0226,
+      "O": 0.0326,
+      "Na": 0.000401,
+      "Mg": 0.000254,
+      "Al": 0.0034,
+      "Si": 0.0069099999999999995,
+      "K": 0.000102,
+      "Ca": 0.000226,
+      "Ti": 9.13e-05,
+      "Fe": 0.0009570000000000001
+    }
+  },
+  "Boron-PE": {
+    "Name": "Boron-PE",
+    "MaterialNumber": 17,
+    "Density": -0.98,
+    "CharacterSize": 2,
+    "Color": "yellowgreen",
+    "Comment": "PE B-770  wt.10% B2O3 wt.90% HDPE(C2H4)",
+    "Composition": {
+      "H": -0.129,
+      "C": -0.7709999999999999,
+      "B": -0.031,
+      "O": -0.069
+    }
+  },
+  "RaCl2": {
+    "Name": "RaCl2",
+    "MaterialNumber": 18,
+    "Density": -4.9,
+    "CharacterSize": 2,
+    "Color": "violet",
+    "Comment": "",
+    "Composition": {
+      "226Ra": 1.0,
+      "Cl": 2.0
+    }
+  }
+}

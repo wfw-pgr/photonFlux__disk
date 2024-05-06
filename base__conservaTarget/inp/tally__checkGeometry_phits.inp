@@ -1,0 +1,32 @@
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- tally for geometry check ( target region )          ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$ -- window & conveter & housing & Ra-Target -- $$
+$$
+
+[T-Track]
+   mesh =  xyz          $$ mesh    :: [ xyz, r-z, reg, tet ]
+ x-type =    2          $$ x-type  :: [ 1: (nx,data[nx+1]), 2:(nx,xmin,xmax), 3:logarithmic ]
+     nx =   200
+   xmin =  @buff.xMin - @tally.space
+   xmax =  @buff.xMax + @tally.space
+ y-type =    2
+     ny =    1
+   ymin =  @buff.yMin - @tally.space
+   ymax =  @buff.yMax + @tally.space
+ z-type =    2
+     nz =   800
+   zmin =  @buff.zMin - @tally.space
+   zmax =  @buff.zMax + @tally.space
+ e-type =    2
+     ne =    1
+   emin =  0.0
+   emax =  1.0e3
+   axis =   xz
+   file =  out/geometry_check_target.dat
+  title =  geometry of target region
+  gshow =    1
+ epsout =    1
+

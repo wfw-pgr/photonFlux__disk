@@ -1,0 +1,26 @@
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- [1] tally for fluence calculation                   ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$
+
+[T-Track]
+   mesh =  reg          $$ mesh    :: [ xyz, r-z, reg, tet ]
+    reg =  341          $$ region number ::
+    volume
+     reg     vol
+     341     1.0
+ e-type =    2
+     ne =  100
+   emin =  0.0
+   emax =  50.0
+   part =  photon
+   unit =    2           $$ unit is [1/cm^2/MeV/source]
+   axis =  eng
+   file =  out/tally__fluence_eng.dat
+  x-txt =  energy [MeV]
+  y-txt =  track length [photons m/MeV/s]
+ epsout =    1
+
+

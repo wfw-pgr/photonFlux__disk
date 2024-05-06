@@ -1,0 +1,88 @@
+
+$$ ========================================================== $$
+$$ ===       geometry_phits.inp                           === $$
+$$ ========================================================== $$
+$$
+[Surface]
+
+   $$ ------------------------------------------- $$
+   $$ --- [1] target system                    -- $$
+   $$ ------------------------------------------- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   21  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.01.zMin @lyr.01.zMax
+   22  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.02.zMin @lyr.02.zMax
+   23  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.03.zMin @lyr.03.zMax
+   24  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.04.zMin @lyr.04.zMax
+   25  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.05.zMin @lyr.05.zMax
+   26  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.06.zMin @lyr.06.zMax
+   27  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.07.zMin @lyr.07.zMax
+   28  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.08.zMin @lyr.08.zMax
+   29  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.09.zMin @lyr.09.zMax
+   30  rpp  @lyr.xMin @lyr.xMax @lyr.yMin @lyr.yMax @lyr.10.zMin @lyr.10.zMax
+
+   $$ ------------------------------------------- $$
+   $$ --- [2] irradiation target               -- $$
+   $$ ------------------------------------------- $$
+   $$ [surfNum] [rcc] [x0] [y0] [z0] [dx] [dy] [dz] [r0] -- $
+   41  rcc     @target.x0    @target.y0    @target.z0    @target.dx    @target.dy    @target.dz    @target.radius
+   42  rcc     @quartTube.x0 @quartTube.y0 @quartTube.z0 @quartTube.dx @quartTube.dy @quartTube.dz @quartTube.radius
+   43  rcc     @quartAir.x0  @quartAir.y0  @quartAir.z0  @quartAir.dx  @quartAir.dy  @quartAir.dz  @quartAir.radius
+
+   $$ ------------------------------------------- $$
+   $$ --- [3] background air / boundary void   -- $$
+   $$ ------------------------------------------- $$
+   $$  --  background air     -- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   51  rpp     @buff.xMin @buff.xMax @buff.yMin @buff.yMax @buff.zMin @buff.zMax
+   
+   $$ -- boundary void region -- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   61  rpp     @bb.xMin @bb.xMax @bb.yMin @bb.yMax @bb.zMin @bb.zMax
+
+
+   $$ ------------------------------------------- $$
+   $$ --- [x] template of surface geometry     -- $$
+   $$ ------------------------------------------- $$
+   $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
+   $$ [surfNum] [rcc] [x0] [y0] [z0] [dx] [dy] [dz] [r0]         -- $
+
+
+[Cell]
+
+   $$ ------------------------------------------- $$
+   $$ --- [1] target system                    -- $$
+   $$ ------------------------------------------- $$
+
+   $$  [cellNum]  [matNum]  [Density]  [surfNums]
+   321 @lyr.01.matN      @lyr.01.matD     -21
+   322 @lyr.02.matN      @lyr.02.matD     -22
+   323 @lyr.03.matN      @lyr.03.matD     -23
+   324 @lyr.04.matN      @lyr.04.matD     -24
+   325 @lyr.05.matN      @lyr.05.matD     -25
+   326 @lyr.06.matN      @lyr.06.matD     -26
+   327 @lyr.07.matN      @lyr.07.matD     -27
+   328 @lyr.08.matN      @lyr.08.matD     -28
+   329 @lyr.09.matN      @lyr.09.matD     -29
+   330 @lyr.10.matN      @lyr.10.matD     -30 +42
+
+   $$ ------------------------------------------- $$
+   $$ --- [2] irradiation target               -- $$
+   $$ ------------------------------------------- $$
+   341 @RaCl2.matNum          @RaCl2.Density        -41
+   342 @SiO2.matNum           @SiO2.Density         -42 +43
+   343 @Air.matNum            @Air.Density          -43 +41
+   
+   $$ ------------------------------------------- $$
+   $$ --- [3] background air / boundary void   -- $$
+   $$ ------------------------------------------- $$
+   351 @Air.matNum       @Air.Density     -51 +21 +22 +23 +24 +25 +26 +27 +28 +29 +30
+   361 @Air.matNum	     @Air.Density     -61 +51
+   301 -1                                 +61
+
+   $$ ------------------------------------------- $$
+   $$ --- [x] template of surface geometry     -- $$
+   $$ ------------------------------------------- $$
+   $$ [cellNum]   [matNum] [Density]  [surfNums]  #<cellNum>      <- NOT operator !!
+   $$ [cellNum]   [matNum] [Density]  [surfNums]  #(<surfNum>)    <- USE () for surface num.
+   $$ [surfNum]   [sx/sy/sz] [radius] [z-pos]
+
