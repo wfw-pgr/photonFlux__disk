@@ -14,7 +14,7 @@ $ <loadJSON> filepath = "inp/parameters.json"
 
 $$ ---   [Parallelization]    ---------------------------------------------------  $$
 $$ -- use $MPI=... / $OMP=...  -- $$
-$OMP=@OMP.nThreads
+$OMP = 4
 $$ ------------------------------------------------------------------------------  $$
 
 
@@ -41,9 +41,9 @@ input file for radiation shieldings.
 $ <include> filepath = inp/source_phits.inp
 $ <include> filepath = inp/geometry_phits.inp
 $ <include> filepath = inp/materials_phits.inp
-$$ $ <include> filepath = inp/tally__fluence_phits.inp
-$$ $ <include> filepath = inp/tally__cross_phits.inp
-$ <include> filepath = inp/tally__checkGeometry_phits.inp
+$ <include> filepath = inp/tally__fluence_phits.inp
+$ <include> filepath = inp/tally__cross_phits.inp
+$$ $ <include> filepath = inp/tally__checkGeometry_phits.inp
 
 
 

@@ -19,7 +19,7 @@ $$
  output =  current
  factor =  1.0
    part =  photon
-   file =  out/tally__cross_eng.dat
+   file =  out/cross_energy.dat
   x-txt =  energy [MeV]
   y-txt =  counts [photons/MeV/s]
  epsout =    1

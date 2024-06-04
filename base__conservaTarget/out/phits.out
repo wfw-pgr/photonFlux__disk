@@ -1,0 +1,495 @@
+           _________________________________________________________
+          |                                                         |
+          |       _/_/_/_/                                          |
+          |      _/      _/                  _/_/_/_/_/_/           |
+          |     _/      _/  _/      _/   _/      _/      _/_/_/_/_/ |
+          |    _/_/_/_/    _/      _/   _/      _/      _/          |
+          |   _/          _/_/_/_/_/   _/      _/       _/_/_/_/    |
+          |  _/          _/      _/   _/      _/              _/    |
+          | _/          _/      _/   _/      _/      _/_/_/_/_/     |
+          |                                                         |
+          |                                                         |
+          |       Particle and Heavy Ion Transport code System      |
+          |                      Version =  3.280                   |
+          |                       developed by                      |
+          |                                                         |
+          |  Tatsuhiko SATO, Yosuke IWAMOTO, Shintaro HASHIMOTO,    |
+          |    Tatsuhiko OGAWA, Takuya FURUTA, Shinichiro ABE,      |
+          |    Takeshi KAI, Norihiro MATSUDA, Yusuke MATSUYA,       |
+          | Yuho HIRATA, Lan YAO, Pi-En TSAI, Hunter RATLIFF (JAEA),|
+          |                                                         |
+          |            Hiroshi IWASE, Yasuhito SAKAKI (KEK),        |
+          |                                                         |
+          |           Nobuhiro SHIGYO (Kyushu University),          |
+          |                                                         |
+          |      Lembit SIHVER (Technische Universitat Wien), and   |
+          |                                                         |
+          |                     Koji NIITA (RIST)                   |
+          |                                                         |
+          |                 Last Revised  2022-05-09                |
+          |_________________________________________________________|
+
+                 _____________ [ Job Title ] ____________ 
+                |                                        |
+                |  input file for radiation shieldings.  |
+                |________________________________________|
+
+                        Starting Date = 2024-05-06
+                        Starting Time = 18h 57m 01
+
+>>> Input Echo >>>=============================================================
+
+[ Title ]
+input file for radiation shieldings.
+
+[ Parameters ]
+ icntl    =           0     # (D=0) 3:ECH 5:NOR 6:SRC 7,8:GSH 11:DSH 12:DUMP
+ maxcas   =      100000     # (D=10) number of particles per one batch
+ maxbch   =          10     # (D=10) number of batches
+ emin(12) = 0.100000000     # (D=1.e+9) cut-off energy of electron (MeV)
+ emin(13) = 0.100000000     # (D=1.e+9) cut-off energy of positron (MeV)
+ negs     =           1     # (D=-1) =-1:original, =0:No, =1:EGS
+ ipnint   =           1     # (D=0) 0: no, 1: consider photo-nuclear reaction
+ file(1)  = /mnt/c/phits/build_phits328A/phits/ # (D=PhitsPath) PHITS install folder name
+ file(6)  = out/phits.out   # (D=phits.out) general output file name
+
+[ Source ]
+  totfact =  1.24844E+15    # (D=1.0) global factor
+   s-type =  13             # Gaussian distribution in XY plane source
+     proj =  electron       # kind of incident particle         
+       e0 =   45.000        # energy of beam [MeV/n]
+       x0 =   0.0000        # (D=0.0) center position of x-axis [cm]
+       y0 =   0.0000        # (D=0.0) center position of y-axis [cm]
+       z0 =  -10.000        # (D=0.0) minimum position of z-axis [cm]
+       z1 =  -11.000        # (D=0.0) maximum position of z-axis [cm]
+       r1 =  0.27500        # Full Width at Half Maximum of Gaussian [cm]
+      dir =   1.0000        # z-direction of beam [cosine]
+
+[ Material ]
+MAT[ 1 ] 
+            H        -1.0000000E-03
+            C        -1.2600000E-02
+            N        -7.5500000E+01
+            O        -2.3200000E+01
+MAT[ 2 ] 
+            H         2.0000000E+00
+            O         1.0000000E+00
+MAT[ 3 ] 
+        226Ra         1.0000000E+00
+           Cl         2.0000000E+00
+MAT[ 4 ] 
+           Si         1.0000000E+00
+            O         2.0000000E+00
+MAT[ 5 ] 
+           Ti         1.0000000E+00
+MAT[ 6 ] 
+           He         1.0000000E+00
+MAT[ 7 ] 
+           Ta         1.0000000E+00
+MAT[ 8 ] 
+           Al         1.0000000E+00
+
+[ Cell ]
+ 321         5 -4.5100000E+00  -21 
+ 322         6 -1.7900000E-04  -22 
+ 323         7 -1.6654000E+01  -23 
+ 324         2 -1.0000000E+00  -24 
+ 325         7 -1.6654000E+01  -25 
+ 326         2 -1.0000000E+00  -26 
+ 327         7 -1.6654000E+01  -27 
+ 328         1 -1.2049000E-03  -28 
+ 329         8 -2.7000000E+00  -29 
+ 330         1 -1.2049000E-03  -30 +42 
+ 341         3 -4.9000000E+00  -41 
+ 342         4 -2.1960000E+00  -42 +43 
+ 343         1 -1.2049000E-03  -43 +41 
+ 351         1 -1.2049000E-03  -51 +21 +22 +23 +24 +25 +26 +27 +28 +29
+                              +30 
+ 361         1 -1.2049000E-03  -61 +51 
+ 301        -1                 +61 
+
+[ Surface ]
+ 21            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00 -2.0050000E+00 -2.0000000E+00
+ 22            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00 -2.0000000E+00 -6.0000000E-01
+ 23            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00 -6.0000000E-01 -5.0000000E-01
+ 24            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00 -5.0000000E-01 -3.5000000E-01
+ 25            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00 -3.5000000E-01 -2.5000000E-01
+ 26            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00 -2.5000000E-01 -1.0000000E-01
+ 27            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00 -1.0000000E-01  1.6653345E-16
+ 28            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00  1.6653345E-16  5.0000000E-01
+ 29            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00  5.0000000E-01  5.1000000E-01
+ 30            rpp  -2.5000000E+00  2.5000000E+00 -2.5000000E+00
+                     2.5000000E+00  5.1000000E-01  5.7100000E+00
+ 41            rcc   0.0000000E+00  0.0000000E+00  2.7000000E+00
+                     0.0000000E+00  0.0000000E+00  4.9576295E-07
+                     5.0000000E-01
+ 42            rcc   0.0000000E+00  0.0000000E+00  2.6000000E+00
+                     0.0000000E+00  0.0000000E+00  2.0000000E+00
+                     6.0000000E-01
+ 43            rcc   0.0000000E+00  0.0000000E+00  2.7000000E+00
+                     0.0000000E+00  0.0000000E+00  1.8000000E+00
+                     5.0000000E-01
+ 51            rpp  -3.0000000E+00  3.0000000E+00 -3.0000000E+00
+                     3.0000000E+00 -2.5050000E+00  6.2100000E+00
+ 61            rpp  -5.0000000E+01  5.0000000E+01 -5.0000000E+01
+                     5.0000000E+01 -5.0000000E+01  5.0000000E+01
+
+[ Mat Name Color ]
+   mat     name     size          color   # HSB color value
+     0     void     1.00      lightgray   # { -0.800  1.000  1.000 }
+     1      Air     2.00           cyan   # {  0.400  1.000  1.000 }
+     2      H2O     2.00       cyanblue   # {  0.400  1.000  0.500 }
+     3    RaCl2     2.00         violet   # {  0.133  1.000  1.000 }
+     4     SiO2     2.00           blue   # {  0.200  1.000  1.000 }
+     5       Ti     2.00        darkred   # {  1.000  1.000  0.600 }
+     6       He     2.00     pastelcyan   # {  0.400  0.400  1.000 }
+     7       Ta     2.00         purple   # {  0.100  1.000  0.500 }
+     8       Al     2.00           pink   # {  1.000  0.500  1.000 }
+
+[ T-Track ]
+    title = [t-track] in region mesh
+     mesh =  reg            # mesh type is region-wise
+      reg = 341
+   volume                   # combined, lattice or level structure 
+   non     reg      vol     # reg definition
+    1      341   1.0000E+00 # 341
+   e-type =    2            # e-mesh is linear given by emin, emax and ne
+     emin =   0.000000      # minimum value of e-mesh points
+     emax =   50.00000      # maximum value of e-mesh points
+#    edel =  0.5000000      # mesh width of e-mesh points
+       ne =    100          # number of e-mesh points
+#    data = ( e(i), i = 1, ne + 1 )
+#           0.00000E+00  5.00000E-01  1.00000E+00  1.50000E+00  2.00000E+00
+#           2.50000E+00  3.00000E+00  3.50000E+00  4.00000E+00  4.50000E+00
+#           5.00000E+00  5.50000E+00  6.00000E+00  6.50000E+00  7.00000E+00
+#           7.50000E+00  8.00000E+00  8.50000E+00  9.00000E+00  9.50000E+00
+#           1.00000E+01  1.05000E+01  1.10000E+01  1.15000E+01  1.20000E+01
+#           1.25000E+01  1.30000E+01  1.35000E+01  1.40000E+01  1.45000E+01
+#           1.50000E+01  1.55000E+01  1.60000E+01  1.65000E+01  1.70000E+01
+#           1.75000E+01  1.80000E+01  1.85000E+01  1.90000E+01  1.95000E+01
+#           2.00000E+01  2.05000E+01  2.10000E+01  2.15000E+01  2.20000E+01
+#           2.25000E+01  2.30000E+01  2.35000E+01  2.40000E+01  2.45000E+01
+#           2.50000E+01  2.55000E+01  2.60000E+01  2.65000E+01  2.70000E+01
+#           2.75000E+01  2.80000E+01  2.85000E+01  2.90000E+01  2.95000E+01
+#           3.00000E+01  3.05000E+01  3.10000E+01  3.15000E+01  3.20000E+01
+#           3.25000E+01  3.30000E+01  3.35000E+01  3.40000E+01  3.45000E+01
+#           3.50000E+01  3.55000E+01  3.60000E+01  3.65000E+01  3.70000E+01
+#           3.75000E+01  3.80000E+01  3.85000E+01  3.90000E+01  3.95000E+01
+#           4.00000E+01  4.05000E+01  4.10000E+01  4.15000E+01  4.20000E+01
+#           4.25000E+01  4.30000E+01  4.35000E+01  4.40000E+01  4.45000E+01
+#           4.50000E+01  4.55000E+01  4.60000E+01  4.65000E+01  4.70000E+01
+#           4.75000E+01  4.80000E+01  4.85000E+01  4.90000E+01  4.95000E+01
+#           5.00000E+01
+     unit =    2            # unit is [1/cm^2/MeV/source]
+ material =  all            # (D=all) number of specific material
+     axis =     eng            # axis of output
+     file = out/fluence_energy.dat  # file name of output for the above axis
+     part =  photon   
+# kf/name :  22       
+    x-txt = energy [MeV]
+    y-txt = track length [photons m/MeV/s]
+   epsout =    1            # (D=0) generate eps file by ANGEL
+#    used :        main (  %)        temp (  %)       total (  %)
+#  memory :         109 (  0)           0 (  0)         109 (  0)
+
+[ T-Cross ]
+    title = [t-cross] in region mesh
+     mesh =  reg            # mesh type is region-wise
+      reg =    1            # number of crossing regions
+      non     r-from            r-to       area
+      1       ( 342 343 )       341        1.000000    
+   e-type =    2            # e-mesh is linear given by emin, emax and ne
+     emin =   0.000000      # minimum value of e-mesh points
+     emax =   50.00000      # maximum value of e-mesh points
+#    edel =  0.5000000      # mesh width of e-mesh points
+       ne =    100          # number of e-mesh points
+#    data = ( e(i), i = 1, ne + 1 )
+#           0.00000E+00  5.00000E-01  1.00000E+00  1.50000E+00  2.00000E+00
+#           2.50000E+00  3.00000E+00  3.50000E+00  4.00000E+00  4.50000E+00
+#           5.00000E+00  5.50000E+00  6.00000E+00  6.50000E+00  7.00000E+00
+#           7.50000E+00  8.00000E+00  8.50000E+00  9.00000E+00  9.50000E+00
+#           1.00000E+01  1.05000E+01  1.10000E+01  1.15000E+01  1.20000E+01
+#           1.25000E+01  1.30000E+01  1.35000E+01  1.40000E+01  1.45000E+01
+#           1.50000E+01  1.55000E+01  1.60000E+01  1.65000E+01  1.70000E+01
+#           1.75000E+01  1.80000E+01  1.85000E+01  1.90000E+01  1.95000E+01
+#           2.00000E+01  2.05000E+01  2.10000E+01  2.15000E+01  2.20000E+01
+#           2.25000E+01  2.30000E+01  2.35000E+01  2.40000E+01  2.45000E+01
+#           2.50000E+01  2.55000E+01  2.60000E+01  2.65000E+01  2.70000E+01
+#           2.75000E+01  2.80000E+01  2.85000E+01  2.90000E+01  2.95000E+01
+#           3.00000E+01  3.05000E+01  3.10000E+01  3.15000E+01  3.20000E+01
+#           3.25000E+01  3.30000E+01  3.35000E+01  3.40000E+01  3.45000E+01
+#           3.50000E+01  3.55000E+01  3.60000E+01  3.65000E+01  3.70000E+01
+#           3.75000E+01  3.80000E+01  3.85000E+01  3.90000E+01  3.95000E+01
+#           4.00000E+01  4.05000E+01  4.10000E+01  4.15000E+01  4.20000E+01
+#           4.25000E+01  4.30000E+01  4.35000E+01  4.40000E+01  4.45000E+01
+#           4.50000E+01  4.55000E+01  4.60000E+01  4.65000E+01  4.70000E+01
+#           4.75000E+01  4.80000E+01  4.85000E+01  4.90000E+01  4.95000E+01
+#           5.00000E+01
+     unit =    2            # unit is [1/cm^2/MeV/source]
+     axis =  eng            # axis of output
+     file = out/cross_energy.dat  # file name of output for the above axis
+   output = current         # surface crossing current spectrum
+     part =  photon   
+# kf/name :  22       
+    x-txt = energy [MeV]
+    y-txt = counts [photons/MeV/s]
+   epsout =    1            # (D=0) generate eps file by ANGEL
+#    used :        main (  %)        temp (  %)       total (  %)
+#  memory :         117 (  0)           0 (  0)         117 (  0)
+
+[END] of Input Echo <<<========================================================
+
+<<< Report of real Geometry memory >>>
+*           GG/CG memory =     1159
+*     total memory: mdas = 80000000
+*                percent =     0.00 %
+
+<<< Report of material memory for high energy>>>
+*   high energy material =     1740
+*     total memory: mdas = 80000000
+*                percent =     0.00 %
+
+<<< Report of material memory for low energy>>>
+*    low energy material =     6009
+*     total memory: mdas = 80000000
+*                percent =     0.01 %
+
+<<< Report of real tally memory >>>
+*      real tally memory =      226
+*     total memory: mdas = 80000000
+*                percent =     0.00 %
+
+<<< Report of temporary tally memory >>>
+* temporary tally memory =     9123
+*     total memory: mdas = 80000000
+*                percent =     0.01 %
+
+<<< Report of other memory >>>
+*           other memory =     4990
+*     total memory: mdas = 80000000
+*                percent =     0.01 %
+
+<<< Report of total memory >>>
+*      used total memory =    14124
+*     total memory: mdas = 80000000
+*                percent =     0.02 %
+*                ---------------------
+
+-------------------------------------------------------------------------------
+bat[       1] ncas =         100000.
+ bitrseed = 0100001010011000001011101100011110011000110110100110010000000000
+          cpu time =   2 m. 10.46 s.
+
+-------------------------------------------------------------------------------
+bat[       2] ncas =         200000.
+ bitrseed = 0001110011011001101111011000110011100000010010101010010011101100
+          cpu time =   2 m.  8.49 s.
+
+-------------------------------------------------------------------------------
+bat[       3] ncas =         300000.
+ bitrseed = 0111110100010110001100001010110110100011111100000101000000001001
+          cpu time =   2 m.  6.74 s.
+
+-------------------------------------------------------------------------------
+bat[       4] ncas =         400000.
+ bitrseed = 1000000101101111000011011110011001000101111100111101100001010101
+          cpu time =   2 m.  9.55 s.
+
+-------------------------------------------------------------------------------
+bat[       5] ncas =         500000.
+ bitrseed = 0101001111100011001000010000110000110111000010100111010111101100
+          cpu time =   2 m.  6.00 s.
+
+-------------------------------------------------------------------------------
+bat[       6] ncas =         600000.
+ bitrseed = 1111000010101100000101101011010101111000000001010110000101000000
+          cpu time =   2 m.  9.24 s.
+
+-------------------------------------------------------------------------------
+bat[       7] ncas =         700000.
+ bitrseed = 1000111101010000010001011010011111111110001101010011010010010110
+          cpu time =   2 m. 17.03 s.
+
+-------------------------------------------------------------------------------
+bat[       8] ncas =         800000.
+ bitrseed = 1011100110001010010111101101110100011001010001110111110001101101
+          cpu time =   2 m.  6.50 s.
+
+-------------------------------------------------------------------------------
+bat[       9] ncas =         900000.
+ bitrseed = 1010111100110100010100110010101101001010000010000110011011000010
+          cpu time =   2 m.  4.84 s.
+
+-------------------------------------------------------------------------------
+bat[      10] ncas =        1000000.
+ bitrseed = 0110110101111101001100100100001011010110001100100011001111111111
+          cpu time =   2 m. 15.18 s.
+
+===============================================================================
+
+ Summary for the end of job
+
+-------------------------------------------------------------------------------
+ number of analyz call vs ncol
+-------------------------------------------------------------------------------
+     ncol          number
+        1              1.   : start of calculation            
+        2              1.   : end of calculation              
+        3             10.   : end of a batch                  
+        4        1000000.   : source                          
+        5              0.   : detection of geometry error/warn
+        6              0.   : recovery from geometry warning  
+        7              0.   : termination by geometry error   
+        8              0.   : termination by weight cut-off   
+        9              0.   : termination by time cut-off     
+       10       51663557.   : geometry boundary crossing      
+       11        6775222.   : termination by energy cut-off   
+       12        5358858.   : termination by escape or leakage
+       13       14778063.   : reaction : (n,x) type           
+       14      439165176.   : reaction : (n,n'x) type         
+       15              0.   : sequential transport for tally  
+
+-------------------------------------------------------------------------------
+ List of transport particles
+-------------------------------------------------------------------------------
+     Name      kf-code        mass       charge   baryon
+     proton       2212        938.3         1       1
+     neutron      2112        939.6         0       1
+     positron      -11          0.5         1       0
+     photon         22          0.0         0       0
+     deuteron  1000002       1875.6         1       2
+     triton    1000003       2808.9         1       3
+     3he       2000003       2808.4         2       3
+     alpha     2000004       3727.4         2       4
+
+-------------------------------------------------------------------------------
+ prod. particles       number        weight        weight per source
+-------------------------------------------------------------------------------
+     photon           202764.     2.0276545E+05     2.5314039E+14
+     positron          99227.     9.9227316E+04     1.2387930E+14
+     neutron            1433.     1.4330000E+03     1.7890137E+12
+     proton               49.     4.9000000E+01     6.1173533E+10
+     alpha                37.     3.7000000E+01     4.6192260E+10
+     3he                   6.     6.0000000E+00     7.4906367E+09
+     deuteron              4.     4.0000000E+00     4.9937578E+09
+     triton                1.     1.0000000E+00     1.2484395E+09
+
+-------------------------------------------------------------------------------
+ particle decays       number        weight        weight per source
+-------------------------------------------------------------------------------
+     positron          99290.     9.9290316E+04     1.2395795E+14
+
+-------------------------------------------------------------------------------
+ stop. particles.    number        weight        weight per source
+-------------------------------------------------------------------------------
+     electron       39394413.     3.9394415E+07     4.9181542E+16
+     photon          1176532.     1.1765320E+06     1.4688289E+15
+     positron          99290.     9.9290316E+04     1.2395795E+14
+     nucleus            1143.     1.1430000E+03     1.4269663E+12
+     proton               48.     4.8000000E+01     5.9925094E+10
+     alpha                37.     3.7000000E+01     4.6192260E+10
+     3he                   6.     6.0000000E+00     7.4906367E+09
+     deuteron              3.     3.0000000E+00     3.7453184E+09
+     triton                1.     1.0000000E+00     1.2484395E+09
+
+-------------------------------------------------------------------------------
+ leak. particles       number        weight        weight per source
+-------------------------------------------------------------------------------
+     photon          4332999.     4.3330004E+06     5.4094886E+15
+     electron         970801.     9.7080100E+05     1.2119863E+15
+     positron          53623.     5.3623000E+04     6.6945069E+13
+     neutron            1433.     1.4261545E+03     1.7804676E+12
+     proton                1.     1.0000000E+00     1.2484395E+09
+     deuteron              1.     1.0000000E+00     1.2484395E+09
+
+-------------------------------------------------------------------------------
+ source: maxcas    maxbch      irskip   average weight          total source
+-------------------------------------------------------------------------------
+      100000          10           0    8.0100000E-16    8.0099999999705E-10
+
+-------------------------------------------------------------------------------
+ used ATIMA database
+-------------------------------------------------------------------------------
+     for dedx  =       44 / mdbatima =      500
+
+-------------------------------------------------------------------------------
+ Geometry error summary
+-------------------------------------------------------------------------------
+ Number of lost particles     =     0 / nlost =       10
+ Number of geometry recovering =     0
+ Number of unrecovered errors =     0
+
+-------------------------------------------------------------------------------
+ initial random seed:
+   bitrseed = 0100001010011000001011101100011110011000110110100110010000000000
+ next initial random seed:
+   bitrseed = 0101101000001110011101111011110101001001010001111010111000101101
+
+-------------------------------------------------------------------------------
+ job termination date : 2024/05/06
+                 time :   19:03:04
+
+-------------------------------------------------------------------------------
+    CPU time and number of event called in PHITS
+-------------------------------------------------------------------------------
+
+                             sec
+total cpu time =         1304.46
+
+
+                           count
+      analysis =      518740886.  : data processing
+         nevap =           1144.  : evaporation
+        dexgam =           1132.  : de-excitation
+         nreac =      453943302.  : atomic and nuclear reactions
+         dklos =          99290.  : particle decay
+         hydro =              0.  : nucleon-nucleon scattering
+        n-data =            613.  : neutron data library
+        h-data =              0.  : p, d, a data library
+        p-data =              0.  : photon data library
+        e-data =              0.  : electron data library
+        p-egs5 =       16420794.  : photon interaction with EGS5
+        e-egs5 =      437421459.  : electron interaction with EGS5
+      e-tsmode =              0.  : electron track structure mode
+    ion-tsmode =              0.  : ion track structure mode
+     photonucl =           1146.  : photo-nuclear reaction
+ photonucl lib =              0.  : photo-nuclear reaction with library
+       mu-reac =              0.  : muon-induced nuclear reaction
+       mu-brem =              0.  : muon-induced bremsstrahlung
+       mu-pprd =              0.  : muon-induced pair production
+        mu-cap =              0.  : muon capture in nucleus
+         elast =              0.  : elastic scattering
+         ncasc =              0.  : nuclear reaction model
+
+       bertini =              0.  : Bertini model
+        isobar =              0.  : isobar model
+           JAM =              0.  : JAM model
+           QMD =              0.  : JQMD model
+        JAMQMD =              0.  : JAMQMD model
+          INCL =              0.  : INCL model
+        INCELF =              0.  : INCELF model
+     frag data =              0.  : user defined cross section
+       SCINFUL =              0.  : SCINFUL mode
+
+>>> Citation Request >>>=======================================================
+
+ This execution uses model(s) that must be explicitly cited in addition to
+ the PHITS original document: T.Sato et al., J.Nucl.Sci.Technol.55, 684-690 (2018).
+ Please refer the following document(s) in your publication using this result
+
+ The EGS5 code:
+    H. Hirayama et al., SLAC-R-730 (2005) and KEK Report 2005-8 (2005)
+
+ The KUROTAMA model:
+    K. Iida, A. Kohama, and K. Oyamatsu, J. Phys. Soc. Japan 76, 044201 (2007).
+
+ END 

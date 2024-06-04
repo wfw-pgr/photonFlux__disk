@@ -14,7 +14,7 @@ $ <loadJSON> filepath = "inp/parameters.json"
 
 $$ ---   [Parallelization]    ---------------------------------------------------  $$
 $$ -- use $MPI=... / $OMP=...  -- $$
-$OMP=@OMP.nThreads
+$OMP = 4
 $$ ------------------------------------------------------------------------------  $$
 
 
@@ -26,7 +26,7 @@ input file for radiation shieldings.
 
 [Parameters]
   icntl     = 0                        $$ ( 0:transport, 6:check-source, 8:check-Geometry )
-  file(1)   = /mnt/c/kent/phits/build/phits/         $$
+  file(1)   = /mnt/c/phits/build_phits328A/phits/         $$
   file(6)   = out/phits.out            $$ File Name of output
   maxcas    = 1E+5                $$ #.of particles
   maxbch    = 10                  $$ #.of batches
@@ -301,41 +301,60 @@ $$ ----------------------------------------------------------------- $$
     6    He                 2.0        pastelcyan          
     7    Ta                 2.0        purple              
     8    Al                 2.0        pink                
-$$ $ <include> filepath = inp/tally__fluence_phits.inp
-$$ $ <include> filepath = inp/tally__cross_phits.inp
-$ <include> filepath = inp/tally__checkGeometry_phits.inp
+$ <include> filepath = inp/tally__fluence_phits.inp
 $$
 $$ ---------------------------------------------------------- $$
-$$ --- tally for geometry check ( target region )          ---$$
+$$ --- [1] tally for fluence calculation                   ---$$
 $$ ---------------------------------------------------------- $$
 $$
-$$ -- window & conveter & housing & Ra-Target -- $$
 $$
 
 [T-Track]
-   mesh =  xyz          $$ mesh    :: [ xyz, r-z, reg, tet ]
- x-type =    2          $$ x-type  :: [ 1: (nx,data[nx+1]), 2:(nx,xmin,xmax), 3:logarithmic ]
-     nx =   200
-   xmin =  -3 - 1
-   xmax =  3 + 1
- y-type =    2
-     ny =    1
-   ymin =  -3 - 1
-   ymax =  3 + 1
- z-type =    2
-     nz =   800
-   zmin =  -2.505 - 1
-   zmax =  6.21 + 1
+   mesh =  reg          $$ mesh    :: [ xyz, r-z, reg, tet ]
+    reg =  341          $$ region number ::
+    volume
+     reg     vol
+     341     1.0
  e-type =    2
-     ne =    1
+     ne =  100
    emin =  0.0
-   emax =  1.0e3
-   axis =   xz
-   file =  out/geometry_check_target.dat
-  title =  geometry of target region
-  gshow =    1
+   emax =  50.0
+   part =  photon
+   unit =    2           $$ unit is [1/cm^2/MeV/source]
+   axis =  eng
+   file =  out/fluence_energy.dat
+  x-txt =  energy [MeV]
+  y-txt =  track length [photons m/MeV/s]
  epsout =    1
 
+
+$ <include> filepath = inp/tally__cross_phits.inp
+
+$$ ---------------------------------------------------------- $$
+$$ --- T-cross   energy specification                     --- $$
+$$ ---------------------------------------------------------- $$
+$$
+
+[T-Cross]
+   mesh =  reg          $$ mesh    :: [ xyz, r-z, reg ]
+   reg  =  1            $$ number of surfaces 
+   r-from    r-to    area
+   $$ -- fluence -- $$
+   (342 343) 341     1.0
+ e-type =     2
+     ne =   100
+   emin =     0
+   emax =  50.0
+   unit =     2       $$ unit :: 1: 1/cm2/MeV/source $$ => count/MeV/s
+   axis =   eng       $$ axis :: cos, the, etc.
+ output =  current
+ factor =  1.0
+   part =  photon
+   file =  out/cross_energy.dat
+  x-txt =  energy [MeV]
+  y-txt =  counts [photons/MeV/s]
+ epsout =    1
+$$ $ <include> filepath = inp/tally__checkGeometry_phits.inp
 
 
 
@@ -394,7 +413,7 @@ $$                  @target.thick :                                    4.9576295
 $$               @quartTube.thick :                                                0.1
 $$              @quartTube.length :                                                  2
 $$               @bufferAir.thick :                                                0.5
-$$               @phits_directory :                     /mnt/c/kent/phits/build/phits/
+$$               @phits_directory :                /mnt/c/phits/build_phits328A/phits/
 $$                  @phits_output :                                      out/phits.out
 $$                   @beam.energy :                                                 45
 $$                  @beam.current :                                             0.0002

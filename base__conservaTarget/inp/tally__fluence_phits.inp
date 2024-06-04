@@ -18,7 +18,7 @@ $$
    part =  photon
    unit =    2           $$ unit is [1/cm^2/MeV/source]
    axis =  eng
-   file =  out/tally__fluence_eng.dat
+   file =  out/fluence_energy.dat
   x-txt =  energy [MeV]
   y-txt =  track length [photons m/MeV/s]
  epsout =    1

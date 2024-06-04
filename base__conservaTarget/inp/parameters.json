@@ -36,8 +36,8 @@
 
 
     "phits_directory"   : "/mnt/c/phits/build_phits328A/phits/",  // Directory of PHITS  // 133.144.160.74
-    "phits_directory"   : "/mnt/e/nishida/phits/build/phits/",    // Directory of PHITS  // 133.144.160.159
-    "phits_directory"   : "/mnt/c/kent/phits/build/phits/",       // Directory of PHITS  // 133.144.160.73
+    // "phits_directory"   : "/mnt/e/nishida/phits/build/phits/",    // Directory of PHITS  // 133.144.160.159
+    // "phits_directory"   : "/mnt/c/kent/phits/build/phits/",       // Directory of PHITS  // 133.144.160.73
     "phits_output"      : "out/phits.out", 
 
 
