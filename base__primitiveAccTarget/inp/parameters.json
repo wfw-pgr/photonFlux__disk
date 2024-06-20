@@ -15,11 +15,11 @@
     "NAvogadro"         : 6.02e23,
     
     "target.activity"   : 50.0e3,                        // -- [Bq]    --- //
-    "target.halflife"   : "1700.0*365.0*24.0*3600",      // -- [s]     --- //
+    "target.halflife"   : "1600.0*365.0*24.0*3600",      // -- [s]     --- //
     "target.g_mol"      : 297.0,                         // -- [g/mol] --- //
     
     "target.Density"    : 4.9,
-    "target.diameter"   : "10.0 * @mm",
+    "target.diameter"   : "11.0 * @mm",
     "target.radius"     : "0.50 * @target.diameter",
     "target.distance"   : "27.0 * @mm",
 
