@@ -1,0 +1,206 @@
+{
+    settings: {
+	    characterSize:2.0,
+	    materialList:[ "Air", "H2O", "RaCl2", "SiO2", "Ti", "He", "Ta", "Al" ], 
+    },
+    
+    Air: {
+	Name: "Air",
+	Density: -0.0012049,
+	Color: "cyan",
+	Comment: "JAERI-Tech-96-001 <-- JAERI-M6928",
+	Composition: {
+	    H: -0.001,
+	    C: -0.0126,
+	    N: -75.5,
+	    O: -23.2,
+	},
+    },
+    H2O: {
+	Name: "H2O",
+	Density: -1.0,
+	Color: "cyanblue",
+	Comment: "",
+	Composition: {
+	    H: 2.0,
+	    O: 1.0,
+	},
+    },
+    Concrete: {
+	Name: "Concrete",
+	Density: -2.1,
+	Color: "yellow",
+	Comment: "Shahei-Keisan-Jitsumu-Manual-2007",
+	Composition: {
+	    H: -0.0103,
+	    C: -0.001,
+	    O: -0.5446,
+	    Mg: -0.0022,
+	    Al: -0.0348,
+	    Si: -0.346,
+	    Ca: -0.0446,
+	    Fe: -0.0143,
+	},
+    },
+    Polyethylen: {
+	Name: "Polyethylen",
+	Density: -0.87,
+	Color: "yellowgreen",
+	Comment: "PE:: Data from JAERI-Tech-96-001",
+	Composition: {
+	    H: 2.0,
+	    C: 1.0,
+	},
+    },
+    Fe: {
+	Name: "Fe",
+	Density: -7.86,
+	Color: "red",
+	Comment: "",
+	Composition: {
+	    Fe: 1.0,
+	},
+    },
+    SS400: {
+	Name: "SS400",
+	Density: -7.85,
+	Color: "red",
+	Comment: "Structure Steel 400 N/m2",
+	Composition: {
+	    Fe: -0.996,
+	    Si: -0.002,
+	    C: -0.0013,
+	    S: -0.00025,
+	    P: -0.0002,
+	},
+    },
+    SUS316: {
+	Name: "SUS316",
+	Density: -7.98,
+	Color: "red",
+	Comment: "Stainless Steel",
+	Composition: {
+	    Fe: -0.669,
+	    C: -0.0004,
+	    Si: -0.00015,
+	    Mn: -0.01,
+	    P: -0.000225,
+	    Ni: -0.12,
+	    Cr: -0.17,
+	    Mo: -0.025,
+	},
+    },
+    Al: {
+	Name: "Al",
+	Density: -2.7,
+	Color: "pink",
+	Comment: "pure Aluminum",
+	Composition: {
+	    Al: 1.0,
+	},
+    },
+    Pb: {
+	Name: "Pb",
+	Density: -11.34,
+	Color: "orange",
+	Comment: "pure Lead",
+	Composition: {
+	    Pb: 1.0,
+	},
+    },
+    Ti: {
+	Name: "Ti",
+	Density: -4.51,
+	Color: "darkred",
+	Comment: "pure Titanium",
+	Composition: {
+	    Ti: 1.0,
+	},
+    },
+    Ta: {
+	Name: "Ta",
+	Density: -16.654,
+	Color: "purple",
+	Comment: "pure Tantal",
+	Composition: {
+	    Ta: 1.0,
+	},
+    },
+    Ra: {
+	Name: "Ra",
+	Density: -5.5,
+	Color: "violet",
+	Comment: "pure Radium",
+	Composition: {
+	    "226Ra": 1.0,
+	},
+    },
+    He: {
+	Name: "He",
+	Density: -0.000179,
+	Color: "pastelcyan",
+	Comment: "",
+	Composition: {
+	    He: 1.0,
+	},
+    },
+    N: {
+	Name: "N",
+	Density: -0.00125,
+	Color: "pastelgreen",
+	Comment: "",
+	Composition: {
+	    N: 1.0,
+	},
+    },
+    "SiO2": {
+	Name: "SiO2",
+	Density: -2.196,
+	Color: "blue",
+	Comment: "Quartz-Glass",
+	Composition: {
+	    Si: 1.0,
+	    O: 2.0,
+	},
+    },
+    Soil: {
+	Name: "Soil",
+	Density: -1.52,
+	Color: "brown",
+	Comment: "Houshasen-Shahei-Handbook-Kisohen <-- JAERI-M8171",
+	Composition: {
+	    H: 0.0226,
+	    O: 0.0326,
+	    Na: 0.000401,
+	    Mg: 0.000254,
+	    Al: 0.0034,
+	    Si: 0.00691,
+	    K: 0.000102,
+	    Ca: 0.000226,
+	    Ti: 9.13e-05,
+	    Fe: 0.000957,
+	},
+    },
+    "Boron-PE": {
+	Name: "Boron-PE",
+	Density: -0.98,
+	Color: "yellowgreen",
+	Comment: "PE B-770  wt.10% B2O3 wt.90% HDPE(C2H4)",
+	Composition: {
+	    H: -0.129,
+	    C: -0.771,
+	    B: -0.031,
+	    O: -0.069,
+	},
+    },
+    RaCl2: {
+	Name: "RaCl2",
+	Density: -4.9,
+	Color: "violet",
+	Comment: "",
+	Composition: {
+	    "226Ra": 1.0,
+	    Cl: 2.0,
+	},
+    },
+}

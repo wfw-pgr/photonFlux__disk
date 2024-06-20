@@ -1,0 +1,25 @@
+
+$$ ---------------------------------------------------------- $$
+$$ --- T-cross   energy specification                     --- $$
+$$ ---------------------------------------------------------- $$
+$$
+
+[T-Cross]
+   mesh =  reg          $$ mesh    :: [ xyz, r-z, reg ]
+   reg  =  1            $$ number of surfaces 
+   r-from    r-to    area
+   $$ -- fluence -- $$
+   (342 343) 341     1.0
+ e-type =     2
+     ne =   100
+   emin =     0
+   emax =  50.0
+   unit =     2       $$ unit :: 1: 1/cm2/MeV/source $$ => count/MeV/s
+   axis =   eng       $$ axis :: cos, the, etc.
+ output =  current
+ factor =  1.0
+   part =  photon
+   file =  out/cross_energy.dat
+  x-txt =  energy [MeV]
+  y-txt =  counts [photons/MeV/s]
+ epsout =    1
