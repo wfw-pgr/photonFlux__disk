@@ -120,9 +120,9 @@ $$
    $$ --- [2] irradiation target               -- $$
    $$ ------------------------------------------- $$
    $$ [surfNum] [rcc] [x0] [y0] [z0] [dx] [dy] [dz] [r0] -- $
-   41  rcc  0    0    2.7    0    0    4.9576295101E-7    0.5
-   42  rcc  0 0 2.6 0 0 2 0.6
-   43  rcc  0  0  2.7  0  0  1.8  0.5
+   41  rcc  0    0    2.7    0    0    3.85620185521E-7    0.55
+   42  rcc  0 0 2.6 0 0 2 0.65
+   43  rcc  0  0  2.7  0  0  1.8  0.55
 
    $$ ------------------------------------------- $$
    $$ --- [3] background air / boundary void   -- $$
@@ -328,6 +328,38 @@ $$
  epsout =    1
 
 
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- [2] tally for fluence 2d                            ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$
+
+[T-Track]
+   mesh =  xyz          $$ mesh    :: [ xyz, r-z, reg, tet ]
+ x-type =    2          $$ x-type  :: [ 1: (nx,data[nx+1]), 2:(nx,xmin,xmax), 3:logarithmic ]
+     nx =   100
+   xmin =  -3
+   xmax =  3
+ y-type =    2
+     ny =    1
+   ymin =  -3
+   ymax =  3
+ z-type =    2
+     nz =   100
+   zmin =  -2.505
+   zmax =  6.21
+ e-type =    2
+     ne =    1
+   emin =  0.0
+   emax =  1.0e3
+   axis =   xz
+   part =  photon
+   file =  out/fluence_2d.dat
+  title =  fluence in xz plane
+  gshow =    1
+ epsout =    1
+
 $ <include> filepath = inp/tally__cross_phits.inp
 
 $$ ---------------------------------------------------------- $$
@@ -399,15 +431,15 @@ $$                            @pi :                                      3.14159
 $$                           @ln2 :                                      0.69314718056
 $$                     @NAvogadro :                                           6.02E+23
 $$               @target.activity :                                               5E+4
-$$               @target.halflife :                                        5.36112E+10
+$$               @target.halflife :                                        5.04576E+10
 $$                  @target.g_mol :                                                297
 $$                @target.Density :                                                4.9
-$$               @target.diameter :                                                  1
-$$                 @target.radius :                                                0.5
+$$               @target.diameter :                                                1.1
+$$                 @target.radius :                                               0.55
 $$               @target.distance :                                                2.7
-$$                   @target.Area :                                     0.785398163395
-$$                    @target.QTM :                                      7.9612632E+17
-$$                  @target.thick :                                    4.9576295101E-7
+$$                   @target.Area :                                     0.950331777708
+$$                    @target.QTM :                                      7.4929536E+17
+$$                  @target.thick :                                   3.85620185521E-7
 $$               @quartTube.thick :                                                0.1
 $$              @quartTube.length :                                                  2
 $$               @bufferAir.thick :                                                0.5
@@ -480,15 +512,15 @@ $$                     @target.y0 :                                             
 $$                     @target.z0 :                                                2.7
 $$                     @target.dx :                                                  0
 $$                     @target.dy :                                                  0
-$$                     @target.dz :                                    4.9576295101E-7
-$$              @quartTube.radius :                                                0.6
+$$                     @target.dz :                                   3.85620185521E-7
+$$              @quartTube.radius :                                               0.65
 $$                  @quartTube.x0 :                                                  0
 $$                  @quartTube.y0 :                                                  0
 $$                  @quartTube.z0 :                                                2.6
 $$                  @quartTube.dx :                                                  0
 $$                  @quartTube.dy :                                                  0
 $$                  @quartTube.dz :                                                  2
-$$               @quartAir.radius :                                                0.5
+$$               @quartAir.radius :                                               0.55
 $$               @quartAir.length :                                                1.8
 $$                   @quartAir.x0 :                                                  0
 $$                   @quartAir.y0 :                                                  0
@@ -509,10 +541,6 @@ $$                       @bb.yMin :                                             
 $$                       @bb.yMax :                                               5E+1
 $$                       @bb.zMin :                                              -5E+1
 $$                       @bb.zMax :                                               5E+1
-$$                @tally.particle :  (photon electron neutron) neutron electron photon
-$$                   @tally.space :                                                  1
-$$                    @tally.zMin :                                                 -2
-$$                    @tally.zMax :                                                  8
 $$                    @Air.matNum :                                                  1
 $$                   @Air.Density :                                         -0.0012049
 $$                    @H2O.matNum :                                                  2
