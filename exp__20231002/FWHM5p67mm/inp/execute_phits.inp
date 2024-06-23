@@ -120,7 +120,7 @@ $$
    33  rpp  -2.5 2.5 -2.5 2.5 0.15 0.2
    34  rpp  -2.5 2.5 -2.5 2.5 0.2 0.5
    35  rpp  -2.5 2.5 -2.5 2.5 0.5 0.51
-   36  rpp  -2.5 2.5 -2.5 2.5 0.51 1.91275613023
+   36  rpp  -2.5 2.5 -2.5 2.5 0.51 2.59466391646
 
    $$ ------------------------------------------- $$
    $$ --- [2] irradiation target               -- $$
@@ -135,7 +135,7 @@ $$
    $$ ------------------------------------------- $$
    $$  --  background air     -- $$
    $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
-   51  rpp     -3.5 3.5 -3.5 3.5 -11.4 0.9
+   51  rpp     -3.5 3.5 -3.5 3.5 -11.4 3.59466391646
    
    $$ -- boundary void region -- $$
    $$ [surfNum] [rpp] [xMin] [xMax] [yMin] [yMax] [zMin] [zMax]  -- $
@@ -403,7 +403,7 @@ $$
  z-type =    2
      nz =   100
    zmin =  -11.4
-   zmax =  0.9
+   zmax =  3.59466391646
  e-type =    2
      ne =    1
    emin =  0.0
@@ -437,7 +437,7 @@ $$
  z-type =    2
      nz =   800
    zmin =  -11.4
-   zmax =  0.9
+   zmax =  3.59466391646
  e-type =    2
      ne =    1
    emin =  0.0
@@ -502,12 +502,13 @@ $$                @target.Density :                                             
 $$               @target.diameter :                                                0.3
 $$                 @target.radius :                                               0.15
 $$               @target.distance :                                                  1
+$$               @quartTube.thick :                                                0.1
+$$              @quartTube.length :                                                  2
 $$                   @target.Area :                                    0.0706858347056
 $$                    @target.QTM :                                   8.0624180736E+17
 $$                  @target.thick :                                0.00000557846729712
-$$               @quartTube.thick :                                                0.1
-$$              @quartTube.length :                                                  2
-$$               @bufferAir.thick :                                                0.5
+$$              @quartTube.radius :                                               0.25
+$$            @quartTube.z.maxLen :                                      1.15388659705
 $$               @phits_directory :                /mnt/c/phits/build_phits328A/phits/
 $$                  @phits_output :                                      out/phits.out
 $$                   @beam.energy :                                               44.5
@@ -528,8 +529,7 @@ $$              @lyr.SUS316.thick :                                             
 $$                @lyr.C276.thick :                                               0.01
 $$             @lyr.airgap1.thick :                                               8.19
 $$             @lyr.airgap2.thick :                                                0.3
-$$             @lyr.airgap3.thick :                                               0.49
-$$             @lyr.airgap4.thick :                                      1.40275613023
+$$             @lyr.airgap3.thick :                                      2.08466391646
 $$                      @lyr.xMin :                                               -2.5
 $$                      @lyr.xMax :                                                2.5
 $$                      @lyr.yMin :                                               -2.5
@@ -598,14 +598,13 @@ $$                   @lyr.15.zMax :                                             
 $$                   @lyr.16.matN :                                        @Air.matNum
 $$                   @lyr.16.matD :                                       @Air.Density
 $$                   @lyr.16.zMin :                                               0.51
-$$                   @lyr.16.zMax :                                      1.91275613023
+$$                   @lyr.16.zMax :                                      2.59466391646
 $$                     @target.x0 :                                                  0
 $$                     @target.y0 :                                                  0
 $$                     @target.z0 :                                                  1
 $$                     @target.dx :                                0.00000524204455439
 $$                     @target.dy :                                                  0
 $$                     @target.dz :                                0.00000190794818452
-$$              @quartTube.radius :                                               0.25
 $$                  @quartTube.x0 :                                   -0.0939692620785
 $$                  @quartTube.y0 :                                                  0
 $$                  @quartTube.z0 :                                     0.965797985667
@@ -626,7 +625,7 @@ $$                     @buff.xMax :                                             
 $$                     @buff.yMin :                                               -3.5
 $$                     @buff.yMax :                                                3.5
 $$                     @buff.zMin :                                              -11.4
-$$                     @buff.zMax :                                                0.9
+$$                     @buff.zMax :                                      3.59466391646
 $$                       @bb.xMin :                                              -5E+1
 $$                       @bb.xMax :                                               5E+1
 $$                       @bb.yMin :                                              -5E+1

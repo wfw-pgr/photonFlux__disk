@@ -25,14 +25,16 @@
     "target.diameter"   : "3.0 * @mm",
     "target.radius"     : "0.50 * @target.diameter",
     "target.distance"   : "10.0 * @mm",
+    
+    "quartTube.thick"   : "1.0*@mm",
+    "quartTube.length"  : "20.0*@mm",
 
     "target.Area"       : "0.25 * @pi * ( @target.diameter )*( @target.diameter )" ,
     "target.QTM"        : "@target.activity * @target.halflife * @target.g_mol",
     "target.thick"      : "@target.QTM / ( @ln2 * @NAvogadro * @target.Density * @target.Area )",
 
-    "quartTube.thick"   : "1.0*@mm",
-    "quartTube.length"  : "20.0*@mm",
-    "bufferAir.thick"   : "5.0*@mm",
+    "quartTube.radius"  : "@target.radius+@quartTube.thick",
+    "quartTube.z.maxLen": "@quartTube.length * @costh + (2.0*@quartTube.radius) * @sinth",
 
     "phits_directory"   : "/mnt/c/phits/build_phits328A/phits/",  // Directory of PHITS  // 133.144.160.74
     // "phits_directory"   : "/mnt/e/nishida/phits/build/phits/",    // Directory of PHITS  // 133.144.160.159
@@ -72,8 +74,7 @@
     "lyr.C276.thick"    : "0.1  * @mm",
     "lyr.airgap1.thick" : "81.9 * @mm",
     "lyr.airgap2.thick" : "3.0  * @mm",
-    "lyr.airgap3.thick" : "4.9  * @mm",
-    "lyr.airgap4.thick" : "@lyr.airgap2.thick + ( @costh*@quartTube.length + @sinth*(@quartTube.thick+@target.radius) )*1.2",
+    "lyr.airgap3.thick" : "(@target.distance-@lyr.airgap2.thick) + 1.2*@quartTube.z.maxLen",
     
     "lyr.xMin"          : "(-0.5) * @lyr.Lx",
     "lyr.xMax"          : "(+0.5) * @lyr.Lx",
@@ -175,7 +176,7 @@
     "lyr.16.matN"       : "@Air.matNum",
     "lyr.16.matD"       : "@Air.Density",
     "lyr.16.zMin"       : "@lyr.15.zMax",
-    "lyr.16.zMax"       : "@lyr.16.zMin + @lyr.airgap4.thick",
+    "lyr.16.zMax"       : "@lyr.16.zMin + @lyr.airgap3.thick",
 
 
     // --------------------------- //
@@ -191,7 +192,6 @@
     // --------------------------- //
     // -- quart tube            -- //
     // --------------------------- //
-    "quartTube.radius"  : "@quartTube.thick + @target.radius",
     "quartTube.x0"      : "@target.x0 - @quartTube.thick * @sinth",
     "quartTube.y0"      : 0.0,
     "quartTube.z0"      : "@target.z0 - @quartTube.thick * @costh",
@@ -217,7 +217,7 @@
     "buff.yMin"         : "@lyr.yMin    - @buff.margin",
     "buff.yMax"         : "@lyr.xMax    + @buff.margin",
     "buff.zMin"         : "@lyr.01.zMin - @buff.margin",
-    "buff.zMax"         : "@lyr.10.zMax + @buff.margin",
+    "buff.zMax"         : "@lyr.16.zMax + @buff.margin",
 
 
     // ---------------------------------------------- //
