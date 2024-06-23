@@ -25,7 +25,7 @@ $$ $ <include> filepath = inp/variables.def
 input file for radiation shieldings.
 
 [Parameters]
-  icntl     = 0                        $$ ( 0:transport, 6:check-source, 8:check-Geometry )
+  icntl     = 8                        $$ ( 0:transport, 6:check-source, 8:check-Geometry )
   file(1)   = /mnt/c/phits/build_phits328A/phits/         $$
   file(6)   = out/phits.out            $$ File Name of output
   maxcas    = 1E+5                $$ #.of particles
@@ -171,7 +171,7 @@ $$
    333 10  -7.98     -33
    334 1  -0.0012049     -34
    335 9  -8.89     -35
-   336 1  -0.0012049     -36 + 42
+   336 1  -0.0012049     -36 +42
 
    $$ ------------------------------------------- $$
    $$ --- [2] irradiation target               -- $$
@@ -415,9 +415,41 @@ $$
   gshow =    1
  epsout =    1
 
-$$ $ <include> filepath = inp/tally__cross_phits.inp
-$$ $ <include> filepath = inp/tally__checkGeometry_phits.inp
+$ <include> filepath = inp/tally__checkGeometry_phits.inp
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- tally for geometry check ( target region )          ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$ -- window & conveter & housing & Ra-Target -- $$
+$$
 
+[T-Track]
+   mesh =  xyz          $$ mesh    :: [ xyz, r-z, reg, tet ]
+ x-type =    2          $$ x-type  :: [ 1: (nx,data[nx+1]), 2:(nx,xmin,xmax), 3:logarithmic ]
+     nx =   200
+   xmin =  -3.5
+   xmax =  3.5
+ y-type =    2
+     ny =    1
+   ymin =  -3.5
+   ymax =  3.5
+ z-type =    2
+     nz =   800
+   zmin =  -11.4
+   zmax =  0.9
+ e-type =    2
+     ne =    1
+   emin =  0.0
+   emax =  1.0e3
+   axis =   xz
+   file =  out/check_geometry.dat
+  title =  geometry of target region
+  gshow =    1
+ epsout =    1
+
+
+$$ $ <include> filepath = inp/tally__cross_phits.inp
 
 
 [End]
