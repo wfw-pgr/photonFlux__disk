@@ -1,0 +1,123 @@
+{
+
+    /* ------------------------------------------------------------------- */
+    /* ---  [1]  General settings                                      --- */
+    /* ------------------------------------------------------------------- */
+    "results.summaryFile"          : "dat/summary.dat",
+    "results.time.unit"            : "d",
+    "results.yieldFile"            : "dat/yield.dat", 
+
+    
+    /* ------------------------------------------------------------------- */
+    /* ---  [2]  target materials settings                             --- */
+    /* ------------------------------------------------------------------- */
+    "target.g/cm3"                 :4.9,                            // RaCl2
+    "target.g/mol"                 :297.0,                          // RaCl2
+    "target.activity.Bq"           :49.9e3,                         // (Bq)
+    "target.halflife"              :{ "value":1600.0, "unit":"y" }, // (Ra-226)
+    "product.halflife"             :{ "value":  14.9, "unit":"d" }, // (Ra-225)
+    "decayed.halflife"             :{ "value":   9.9, "unit":"d" }, // (Ac-225)
+    
+    "target.thick.type"            :"fluence",                      // ["fluence","Bq","direct"]
+    "target.thick.direct.mm"       :1.0 ,                           // if ( type == direct )
+    
+    "target.area.type"             :"disk",                         // [ "direct", "disk" ]
+    "target.area.direct.cm2"       :7.07e-2,                        // if ( type == direct )
+    "target.area.diameter.mm"      :11.0,                           // if ( type == disk )
+    
+    
+    /* ------------------------------------------------------------------- */
+    /* ---  [3]  integral settings                                     --- */
+    /* ------------------------------------------------------------------- */
+    "integral.method"              :"rectangular", // [ "simpson", "trapezoid", "rectangular"]
+    "integral.EAxis.min"           :0.0,           // (MeV)
+    "integral.EAxis.max"           :20.0,          // (MeV)
+    "integral.EAxis.num"           :201,           // 
+
+    
+    /* ------------------------------------------------------------------- */
+    /* ---  [4]  photon flux settings                                  --- */
+    /* ------------------------------------------------------------------- */
+    /*  photon flux's unit  == ( photons/MeV/uA/s )                        */
+    /* ------------------------------------------------------------------- */
+    "photon.filetype"              : "phits-out", // ["phits-out","energy-fluence"]
+    "photon.filename"              : "out/fluence_energy.dat",
+    "photon.bin2point.convert"     : "edge",      // convert binned data into E v.s. photons
+    "photon.fit.method"            : "linear",
+    "photon.fit.p0"                : null,        // gaussian
+    "photon.fit.Eth"               : 6.4,         // (MeV)
+    "photon.beam.current.sim"      : 125.7,       // (uA) current in PHITS sim.
+    "photon.beam.current.use"      : 125.7,       // (uA) current to be assumed.
+    "photon.beam.duration"         : 5.95,        // (h)
+
+    
+    /* ------------------------------------------------------------------- */
+    /* --- photon.filetype=="phits-out"         T-Track output file        */
+    /*                               ( e-lower, e-upper, fluence, error )  */
+    /* --- photon.filetype=="energy-fluence"    extracted data             */
+    /*                               ( energy, fluence)                    */
+    /* ------------------------------------------------------------------- */
+    
+    /* ------------------------------------------------------------------- */
+    /* ---  [5]  cross-section settings                                --- */
+    /* ------------------------------------------------------------------- */
+    /*  cross-section's unit   ( mb )                                   */
+    /* ------------------------------------------------------------------- */
+    "xsection.filename"            :"dat/xs__TENDL_Ra226_gn_Ra225_2019.dat",
+    "xsection.fit.Eth"             :6.4,           // (MeV)
+    "xsection.fit.method"          :"linear",      // [ "linear", "gaussian", "log-poly5th" ]
+    "xsection.fit.p0"              :null,          // linear
+    // "xsection.fit.method"          :"log-poly5th", // [ "linear", "gaussian", "log-poly5th" ]
+    // "xsection.fit.p0"              :null,          // linear
+
+
+    /* ------------------------------------------------------------------- */
+    /* ---  [6]  plot settings                                         --- */
+    /* ------------------------------------------------------------------- */
+    "plot.filename"                :"png/dYield__RIproduction.png", 
+    "plot.xRange"                  :[0.0,20.0,11], 
+    "plot.yRange"                  :[0.0,10.0,11], 
+    "plot.xsection.norm"           :1.0e2,         // (mb)       
+    "plot.photon.norm"             :1.0e4,         // (photons/MeV/uA/s)
+    "plot.dYield.norm"             :1.0e4,         // (atoms/MeV/s)  
+    "plot.norm.auto"               :true,          // if true, automatic range
+
+    
+    /* ------------------------------------------------------------------- */
+    /* ---  [7]  cross-section using Breit-Wigner Formula              --- */
+    /* ------------------------------------------------------------------- */
+    "BreitWigner.EAxis.min"        :0.0,           // (MeV)
+    "BreitWigner.EAxis.max"        :50.0,          // (MeV)
+    "BreitWigner.EAxis.num"        :501,
+    "BreitWigner.Er"               :13.45,         // (MeV)
+    "BreitWigner.Et"               :6.4,           // (MeV)
+    "BreitWigner.Gamma"            :3.97,          // (MeV)
+    "BreitWigner.sigma_r"          :521.0,         // (mb)
+    "BreitWigner.datFile"          :"dat/xs__BreitWigner_Ra226_gn_Ra225.dat",
+    "BreitWigner.pngFile"          :"png/xs__BreitWigner_Ra226_gn_Ra225.png",
+    "BreitWigner.label"            :"Ra226(g,n)Ra225",
+    "BreitWigner.xRange"           :[ 0.0,  20.0 ],
+    "BreitWigner.yRange"           :[ 0.0, 600.0 ],
+    "BreitWigner.xTicks"           :11,
+    "BreitWigner.yTicks"           :7,
+
+    
+    /* ------------------------------------------------------------------- */
+    /* ---  [8]  Varian Linac's phi(E) Model                           --- */
+    /* ------------------------------------------------------------------- */
+    "LinacPhi.EAxis.min"           :0.0,           // (MeV)
+    "LinacPhi.EAxis.max"           :20.0,          // (MeV)
+    "LinacPhi.EAxis.num"           :201,
+    "LinacPhi.refFile"             :"dat/photon_spectrum_VarianLinac_originalData.dat",
+    "LinacPhi.outFile"             :"dat/photon_spectrum_VarianLinac.dat",
+    "LinacPhi.pngFile"             :"png/photon_spectrum_VarianLinac.png",
+    "LinacPhi.fit.method"          :"CubicSpline", // "CubicSpline", "exponential", "linear"
+    "LinacPhi.fit.eRange"          :[0.0,20.0],    // (MeV)
+    "LinacPhi.fit.Eth"             :0.0,           // (MeV)
+    "LinacPhi.fit.p0"              : [ 1.0e12, 1.0, 6.4, 1.0e11 ],
+    "LinacPhi.norm.method"         :"simpson",     // "simpson"
+    "LinacPhi.norm.current"        :1.0,           // (uA)
+    "LinacPhi.norm.e-g.efficiency" :40.0,          // (%)
+
+    
+}

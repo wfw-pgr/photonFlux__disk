@@ -1,0 +1,71 @@
+$$
+$$ ================================================================ $$
+$$ ===  PHITS input file   ( main_phits.inp )                   === $$
+$$ ================================================================ $$
+$$
+
+$$ ---   [NOTE]    --------------------------------------------------------------  $$
+$$ *                                                                            *  $$
+$$ * ( space >= 6 ): continuing line  (Error might occur with too many space.)  *  $$
+$$ *                                                                            *  $$
+$$ ------------------------------------------------------------------------------  $$
+
+$ <loadJSON> filepath = "inp/parameters.json"
+
+$$ ---   [Parallelization]    ---------------------------------------------------  $$
+$$ -- use $MPI=... / $OMP=...  -- $$
+$OMP = 4
+$$ ------------------------------------------------------------------------------  $$
+
+
+
+$$ $ <include> filepath = inp/variables.def
+
+[Title]
+input file for radiation shieldings.
+
+[Parameters]
+  icntl     = 0                        $$ ( 0:transport, 6:check-source, 8:check-Geometry )
+  file(1)   = @phits_directory         $$
+  file(6)   = @phits_output            $$ File Name of output
+  maxcas    = @nCascade                $$ #.of particles
+  maxbch    = @nBatch                  $$ #.of batches
+  emin(12)  = 0.1                      $$ cut-off energy of electron to be transported. (MeV)
+                                       $$   ( if negs=1 ) Default :: 0.1 = 100keV
+                                       $$   ( if negs=0 ) Default :: 1e9 :: No e- transport
+                                       $$ if emin(12) is set, the value is prioritized.
+  emin(13)  = 0.1                      $$ cut-off energy of electron to be transported.
+  negs      = 1                        $$ transport of photon (+1/-1), electron(+1), off(0)
+  ipnint    = 1                        $$ p-n reaction ( 0:Off, 1:On, 2:w/ NRF(Full) )
+
+$ <include> filepath = inp/source_phits.inp
+$ <include> filepath = inp/geometry_phits.inp
+$ <include> filepath = inp/materials_phits.inp
+$ <include> filepath = inp/tally__fluence_phits.inp
+$$ $ <include> filepath = inp/tally__cross_phits.inp
+$$ $ <include> filepath = inp/tally__checkGeometry_phits.inp
+
+
+
+[End]
+
+$ <postProcess> for f in `ls out/*.eps`; do gs -dSAFER -dEPSCrop -sDEVICE=pdfwrite -o ${f%.eps}_%d.pdf ${f}; done
+$ <postProcess> mogrify -background white -alpha off -density 400 -resize 50%x50% -path png -format png out/*.pdf
+
+
+
+
+
+$$ ---   [NOTE]    --------------------------------------------------------------  $$
+$$ file(7) = c:/phits/data/xsdir.jnd    $$ nuclear data library :: xsdir
+$$ nspred    =  1
+$$ nucdata   =  1                       $$ nuetron's nuclear data library => 0:Off, 1:On
+$$ negs      =  1                       $$ transports of electron, photon, position ( default:-1 )
+                                       $$  -1: PHITS's original library ( photon )
+                                       $$   0: No Transport
+                                       $$  +1: EGS5 Library             ( photon, electron )
+$$ emcpf     = 20.0                     $$ upper limit of the detailed photon model
+$$ emin(12)  = 0.1     $ ==  1(keV)    $$ upr-limit of transport :: electron (MeV)
+$$ emin(13)  = 0.1     $ ==  1(keV)    $$ upr-limit of transport :: positron (MeV)
+$$ dmax(12)  = 1000.0                   $$ use of nuclear data ( emin(12) < energy < dmax(12) )
+$$ ------------------------------------------------------------------------------  $$

@@ -1,0 +1,233 @@
+{
+    
+    // ---------------------------------------------- //
+    // ---  Parameters Section                   ---- //
+    // ---------------------------------------------- //
+    "OMP.nThreads"      : 4,
+    "nParticle"         : 1.0e6,
+    "nBatch"            : 10,
+    "nCascade"          : "@nParticle/@nBatch",
+    
+    "mm"                : 0.1,
+    "m2cm"              : 100.0,
+    "pi"                : 3.14159265358,
+    "ln2"               : 0.69314718056,
+    "NAvogadro"         : 6.02e23,
+    "theta"             : 70.0, 
+    "sinth"             : "np.sin( @theta /180.0*@pi )", 
+    "costh"             : "np.cos( @theta /180.0*@pi )", 
+    
+    "target.activity"   : 53.8e3,                        // -- [Bq]    --- //
+    "target.halflife"   : "1600.0*365.0*24.0*3600",      // -- [s]     --- //
+    "target.g_mol"      : 297.0,                         // -- [g/mol] --- //
+    
+    "target.Density"    : 4.9,
+    "target.diameter"   : "3.0 * @mm",
+    "target.radius"     : "0.50 * @target.diameter",
+    "target.distance"   : "10.0 * @mm",
+
+    "target.Area"       : "0.25 * @pi * ( @target.diameter )*( @target.diameter )" ,
+    "target.QTM"        : "@target.activity * @target.halflife * @target.g_mol",
+    "target.thick"      : "@target.QTM / ( @ln2 * @NAvogadro * @target.Density * @target.Area )",
+
+    "quartTube.thick"   : "1.0*@mm",
+    "quartTube.length"  : "20.0*@mm",
+    "bufferAir.thick"   : "5.0*@mm",
+
+    "phits_directory"   : "/mnt/c/phits/build_phits328A/phits/",  // Directory of PHITS  // 133.144.160.74
+    // "phits_directory"   : "/mnt/e/nishida/phits/build/phits/",    // Directory of PHITS  // 133.144.160.159
+    // "phits_directory"   : "/mnt/c/kent/phits/build/phits/",       // Directory of PHITS  // 133.144.160.73
+    "phits_output"      : "out/phits.out", 
+
+
+    // ---------------------------------------------- //
+    // ---  source part :: beam settings         ---- //
+    // ---------------------------------------------- //
+
+    "beam.energy"       : 44.50,
+    "beam.current"      : 100.0e-6,
+    "beam.FWHM"         : "  5.77 * @mm",
+    "beam.zStart"       : "-100.0 * @mm",
+    "beam.length"       : "  10.0 * @mm",
+
+    "beam.totfact"      : "@beam.current / 1.602e-19",              // -- unit :: [ particles / s ] -- //
+    "beam.HWHM"         : "0.5 * @beam.FWHM",
+    "beam.zEnd"         : "@beam.zStart - @beam.length",
+
+
+    // ---------------------------------------------- //
+    // ---  Geometry part                        ---- //
+    // ---------------------------------------------- //
+
+    // --------------------------- //
+    // -- convertor             -- //
+    // --------------------------- //
+    "lyr.Lx"            : "50.0 * @mm",
+    "lyr.Ly"            : "50.0 * @mm",
+    "lyr.Ti.thick"      : "0.05 * @mm",
+    "lyr.He.thick"      : "14.0 * @mm",
+    "lyr.Pt.thick"      : "1.0  * @mm",
+    "lyr.H2O.thick"     : "1.5  * @mm",
+    "lyr.SUS316.thick"  : "0.5  * @mm",
+    "lyr.C276.thick"    : "0.1  * @mm",
+    "lyr.airgap1.thick" : "81.9 * @mm",
+    "lyr.airgap2.thick" : "3.0  * @mm",
+    "lyr.airgap3.thick" : "4.9  * @mm",
+    "lyr.airgap4.thick" : "@lyr.airgap2.thick + ( @costh*@quartTube.length + @sinth*(@quartTube.thick+@target.radius) )*1.2",
+    
+    "lyr.xMin"          : "(-0.5) * @lyr.Lx",
+    "lyr.xMax"          : "(+0.5) * @lyr.Lx",
+    "lyr.yMin"          : "(-0.5) * @lyr.Ly",
+    "lyr.yMax"          : "(+0.5) * @lyr.Ly",
+    "lyr.zstart"        : "-1.0*( 2.0*@lyr.Ti.thick + @lyr.He.thick + @lyr.airgap1.thick + 1.0*@lyr.SUS316.thick + 3.0*@lyr.Pt.thick + 3.0*@lyr.H2O.thick )",
+
+    // -- [01]  Ti   0.05 mm   -- //
+    "lyr.01.matN"       : "@Ti.matNum",
+    "lyr.01.matD"       : "@Ti.Density",
+    "lyr.01.zMin"       : "@lyr.zstart",
+    "lyr.01.zMax"       : "@lyr.01.zMin + @lyr.Ti.thick",
+
+    // -- [02]  He     14 mm   -- //
+    "lyr.02.matN"       : "@He.matNum",
+    "lyr.02.matD"       : "@He.Density",
+    "lyr.02.zMin"       : "@lyr.01.zMax",
+    "lyr.02.zMax"       : "@lyr.02.zMin + @lyr.He.thick",
+
+    // -- [03]  Ti   0.05 mm   -- //
+    "lyr.03.matN"       : "@Ti.matNum",
+    "lyr.03.matD"       : "@Ti.Density",
+    "lyr.03.zMin"       : "@lyr.02.zMax",
+    "lyr.03.zMax"       : "@lyr.03.zMin + @lyr.Ti.thick",
+
+    // -- [04]  Air  81.9 mm   -- //
+    "lyr.04.matN"       : "@Air.matNum",
+    "lyr.04.matD"       : "@Air.Density",
+    "lyr.04.zMin"       : "@lyr.03.zMax",
+    "lyr.04.zMax"       : "@lyr.04.zMin + @lyr.airgap1.thick",
+
+    // -- [05]  SUS316 0.5 mm  -- //
+    "lyr.05.matN"       : "@SUS316.matNum",
+    "lyr.05.matD"       : "@SUS316.Density",
+    "lyr.05.zMin"       : "@lyr.04.zMax",
+    "lyr.05.zMax"       : "@lyr.05.zMin + @lyr.SUS316.thick",
+
+    // -- [06]  H2O    1.5 mm  -- //
+    "lyr.06.matN"       : "@H2O.matNum",
+    "lyr.06.matD"       : "@H2O.Density",
+    "lyr.06.zMin"       : "@lyr.05.zMax",
+    "lyr.06.zMax"       : "@lyr.06.zMin + @lyr.H2O.thick",
+
+    // -- [07]  Pt(1)  1.0 mm  -- //
+    "lyr.07.matN"       : "@Pt.matNum",
+    "lyr.07.matD"       : "@Pt.Density",
+    "lyr.07.zMin"       : "@lyr.06.zMax",
+    "lyr.07.zMax"       : "@lyr.07.zMin + @lyr.Pt.thick",
+
+    // -- [08]  H2O    1.5 mm  -- //
+    "lyr.08.matN"       : "@H2O.matNum",
+    "lyr.08.matD"       : "@H2O.Density",
+    "lyr.08.zMin"       : "@lyr.07.zMax",
+    "lyr.08.zMax"       : "@lyr.08.zMin + @lyr.H2O.thick",
+
+    // -- [09]  Pt(2)  1.0 mm  -- //
+    "lyr.09.matN"       : "@Pt.matNum",
+    "lyr.09.matD"       : "@Pt.Density",
+    "lyr.09.zMin"       : "@lyr.08.zMax",
+    "lyr.09.zMax"       : "@lyr.09.zMin + @lyr.Pt.thick",
+
+    // -- [10]  H2O    1.5 mm  -- //
+    "lyr.10.matN"       : "@H2O.matNum",
+    "lyr.10.matD"       : "@H2O.Density",
+    "lyr.10.zMin"       : "@lyr.09.zMax",
+    "lyr.10.zMax"       : "@lyr.10.zMin + @lyr.H2O.thick",
+
+    // -- [11]  Pt(3)  1.0 mm  -- //
+    "lyr.11.matN"       : "@Pt.matNum",
+    "lyr.11.matD"       : "@Pt.Density",
+    "lyr.11.zMin"       : "@lyr.10.zMax",
+    "lyr.11.zMax"       : "@lyr.11.zMin + @lyr.Pt.thick",
+
+    // -- [12]  H2O    1.5 mm  -- //
+    "lyr.12.matN"       : "@H2O.matNum",
+    "lyr.12.matD"       : "@H2O.Density",
+    "lyr.12.zMin"       : "@lyr.11.zMax",
+    "lyr.12.zMax"       : "@lyr.12.zMin + @lyr.H2O.thick",
+
+    // -- [13]  SUS316 0.5 mm  -- //
+    "lyr.13.matN"       : "@SUS316.matNum",
+    "lyr.13.matD"       : "@SUS316.Density",
+    "lyr.13.zMin"       : "@lyr.12.zMax",
+    "lyr.13.zMax"       : "@lyr.13.zMin + @lyr.SUS316.thick",
+
+    // -- [14]  air      3.0 mm  -- //
+    "lyr.14.matN"       : "@Air.matNum",
+    "lyr.14.matD"       : "@Air.Density",
+    "lyr.14.zMin"       : "@lyr.13.zMax",
+    "lyr.14.zMax"       : "@lyr.14.zMin + @lyr.airgap2.thick",
+
+    // -- [15]  C-276    0.1 mm  -- //
+    "lyr.15.matN"       : "@C276.matNum",
+    "lyr.15.matD"       : "@C276.Density",
+    "lyr.15.zMin"       : "@lyr.14.zMax",
+    "lyr.15.zMax"       : "@lyr.15.zMin + @lyr.C276.thick",
+
+    // -- [16]  air      4.9 mm  -- //
+    "lyr.16.matN"       : "@Air.matNum",
+    "lyr.16.matD"       : "@Air.Density",
+    "lyr.16.zMin"       : "@lyr.15.zMax",
+    "lyr.16.zMax"       : "@lyr.16.zMin + @lyr.airgap4.thick",
+
+
+    // --------------------------- //
+    // -- target                -- //
+    // --------------------------- //
+    "target.x0"         : 0.0,
+    "target.y0"         : 0.0,
+    "target.z0"         : "@target.distance",   // distance from the last convertor plate,
+    "target.dx"         : "@sinth * @target.thick",
+    "target.dy"         : 0.0,
+    "target.dz"         : "@costh * @target.thick",
+
+    // --------------------------- //
+    // -- quart tube            -- //
+    // --------------------------- //
+    "quartTube.radius"  : "@quartTube.thick + @target.radius",
+    "quartTube.x0"      : "@target.x0 - @quartTube.thick * @sinth",
+    "quartTube.y0"      : 0.0,
+    "quartTube.z0"      : "@target.z0 - @quartTube.thick * @costh",
+    "quartTube.dx"      : "@quartTube.length * @sinth",
+    "quartTube.dy"      : 0.0,
+    "quartTube.dz"      : "@quartTube.length * @costh",
+
+    "quartAir.radius"   : "@target.radius",
+    "quartAir.length"   : "@quartTube.length - ( 2.0*@quartTube.thick )",
+    "quartAir.x0"       : "@target.x0",
+    "quartAir.y0"       : 0.0,
+    "quartAir.z0"       : "@target.z0",
+    "quartAir.dx"       : "@quartAir.length * @sinth",
+    "quartAir.dy"       : 0.0,
+    "quartAir.dz"       : "@quartAir.length * @costh",
+
+    // --------------------------- //
+    // -- buffer air            -- //
+    // --------------------------- //
+    "buff.margin"       : "10.0 * @mm",
+    "buff.xMin"         : "@lyr.xMin    - @buff.margin",
+    "buff.xMax"         : "@lyr.xMax    + @buff.margin",
+    "buff.yMin"         : "@lyr.yMin    - @buff.margin",
+    "buff.yMax"         : "@lyr.xMax    + @buff.margin",
+    "buff.zMin"         : "@lyr.01.zMin - @buff.margin",
+    "buff.zMax"         : "@lyr.10.zMax + @buff.margin",
+
+
+    // ---------------------------------------------- //
+    // ---  Bounding Box part                    ---- //
+    // ---------------------------------------------- //
+    "bb.xMin"           : "-500.0 * @mm",
+    "bb.xMax"           : "+500.0 * @mm",
+    "bb.yMin"           : "-500.0 * @mm",
+    "bb.yMax"           : "+500.0 * @mm",
+    "bb.zMin"           : "-500.0 * @mm",
+    "bb.zMax"           : "+500.0 * @mm",
+    
+}
