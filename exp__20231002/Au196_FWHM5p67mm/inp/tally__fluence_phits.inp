@@ -1,0 +1,58 @@
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- [1] tally for fluence calculation                   ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$
+
+[T-Track]
+   mesh =  reg          $$ mesh    :: [ xyz, r-z, reg, tet ]
+    reg =  341          $$ region number ::
+    volume
+     reg     vol
+     341     1.0
+ e-type =    2
+     ne =  100
+   emin =  0.0
+   emax =  50.0
+   part =  photon
+   unit =    2           $$ unit is [1/cm^2/MeV/source]
+   axis =  eng
+   file =  out/fluence_energy.dat
+  x-txt =  energy [MeV]
+  y-txt =  track length [photons m/MeV/s]
+ epsout =    1
+
+
+$$
+$$ ---------------------------------------------------------- $$
+$$ --- [2] tally for fluence 2d                            ---$$
+$$ ---------------------------------------------------------- $$
+$$
+$$
+
+[T-Track]
+   mesh =  xyz          $$ mesh    :: [ xyz, r-z, reg, tet ]
+ x-type =    2          $$ x-type  :: [ 1: (nx,data[nx+1]), 2:(nx,xmin,xmax), 3:logarithmic ]
+     nx =   100
+   xmin =  @buff.xMin
+   xmax =  @buff.xMax
+ y-type =    2
+     ny =    1
+   ymin =  @buff.yMin
+   ymax =  @buff.yMax
+ z-type =    2
+     nz =   100
+   zmin =  @buff.zMin
+   zmax =  @buff.zMax
+ e-type =    2
+     ne =    1
+   emin =  0.0
+   emax =  1.0e3
+   axis =   xz
+   part =  photon
+   file =  out/fluence_2d.dat
+  title =  fluence in xz plane
+  gshow =    1
+ epsout =    1
+

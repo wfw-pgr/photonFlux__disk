@@ -1,0 +1,88 @@
+[paramters]
+           results.summaryFile :: dat/summary.dat
+             results.time.unit :: d
+             results.yieldFile :: dat/yield.dat
+                  target.g/cm3 :: 4.9
+                  target.g/mol :: 297.0
+            target.activity.Bq :: 49900.0
+               target.halflife :: {'value': 50457600000.0, 'unit': 's'}
+              product.halflife :: {'value': 1287360.0, 'unit': 's'}
+              decayed.halflife :: {'value': 855360.0, 'unit': 's'}
+             target.thick.type :: fluence
+        target.thick.direct.mm :: 1.0
+              target.area.type :: disk
+        target.area.direct.cm2 :: 0.0707
+       target.area.diameter.mm :: 11.0
+               integral.method :: rectangular
+            integral.EAxis.min :: 0.0
+            integral.EAxis.max :: 20.0
+            integral.EAxis.num :: 201
+               photon.filetype :: phits-out
+               photon.filename :: out/fluence_energy.dat
+      photon.bin2point.convert :: edge
+             photon.fit.method :: linear
+                 photon.fit.p0 :: None
+                photon.fit.Eth :: 6.4
+       photon.beam.current.sim :: 125.7
+       photon.beam.current.use :: 125.7
+          photon.beam.duration :: 5.95
+             xsection.filename :: dat/xs__TENDL_Ra226_gn_Ra225_2019.dat
+              xsection.fit.Eth :: 6.4
+           xsection.fit.method :: linear
+               xsection.fit.p0 :: None
+                 plot.filename :: png/dYield__RIproduction.png
+                   plot.xRange :: [0.0, 20.0, 11]
+                   plot.yRange :: [0.0, 10.0, 11]
+            plot.xsection.norm :: 100.0
+              plot.photon.norm :: 10000.0
+              plot.dYield.norm :: 10000.0
+                plot.norm.auto :: False
+         BreitWigner.EAxis.min :: 0.0
+         BreitWigner.EAxis.max :: 50.0
+         BreitWigner.EAxis.num :: 501
+                BreitWigner.Er :: 13.45
+                BreitWigner.Et :: 6.4
+             BreitWigner.Gamma :: 3.97
+           BreitWigner.sigma_r :: 521.0
+           BreitWigner.datFile :: dat/xs__BreitWigner_Ra226_gn_Ra225.dat
+           BreitWigner.pngFile :: png/xs__BreitWigner_Ra226_gn_Ra225.png
+             BreitWigner.label :: Ra226(g,n)Ra225
+            BreitWigner.xRange :: [0.0, 20.0]
+            BreitWigner.yRange :: [0.0, 600.0]
+            BreitWigner.xTicks :: 11
+            BreitWigner.yTicks :: 7
+            LinacPhi.EAxis.min :: 0.0
+            LinacPhi.EAxis.max :: 20.0
+            LinacPhi.EAxis.num :: 201
+              LinacPhi.refFile :: dat/photon_spectrum_VarianLinac_originalData.dat
+              LinacPhi.outFile :: dat/photon_spectrum_VarianLinac.dat
+              LinacPhi.pngFile :: png/photon_spectrum_VarianLinac.png
+           LinacPhi.fit.method :: CubicSpline
+           LinacPhi.fit.eRange :: [0.0, 20.0]
+              LinacPhi.fit.Eth :: 0.0
+               LinacPhi.fit.p0 :: [1000000000000.0, 1.0, 6.4, 100000000000.0]
+          LinacPhi.norm.method :: simpson
+         LinacPhi.norm.current :: 1.0
+  LinacPhi.norm.e-g.efficiency :: 40.0
+             target.lambda.1/s :: 1.3737220568555486e-11
+            product.lambda.1/s :: 5.384252893984164e-07
+            decayed.lambda.1/s :: 8.103572537410509e-07
+               target.area.cm2 :: 0.9503317777109126
+              target.atoms/cm3 :: 9.931986531986532e+21
+               target.thick.cm :: 3.848489451483964e-07
+             target.tN_product :: 9.931986531986532e+21
+[results]
+
+   -------------------------   [ Decay Time ]   -------------------------
+                         t_max ::  1.74006307e+01   (d)
+                         ratio ::  4.45091063e+01   (%)
+
+   -------------------------   [ Production ]   -------------------------
+                     YieldRate ::  4.49457084e+04   (atoms/s)
+                       N_yield ::  9.62737074e+08   (atoms)
+                       A_yield ::  5.18361988e+02   (Bq)
+                       A_decay ::  2.30718288e+02   (Bq)
+                    efficiency ::  6.18200328e-06   (Bq(Ac)/(Bq(Ra) uA h))
+
+   ----------------------------------------------------------------------
+

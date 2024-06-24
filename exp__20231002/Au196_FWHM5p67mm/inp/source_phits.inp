@@ -1,0 +1,54 @@
+
+$$ ================================================================= $$
+$$ ===  source                                                   === $$
+$$ ================================================================= $$
+
+[Source]
+
+    $$ ----------------------------------------------------------------- $$
+    $$ ---             pencil beam ( cylinder shape )                --- $$
+    $$ ----------------------------------------------------------------- $$
+    $$ s-type    =    1                    $$ ( 1:cylinder( pencil beam ) )
+    $$ totfact   = @beam.totfact
+    $$ proj      = electron
+    $$ dir       =  1.0
+    $$ r0        = @beam.HWHM
+    $$ z0        = @beam.zStart
+    $$ z1        = @beam.zEnd
+    $$ e0        = @beam.energy
+
+
+    $$ ----------------------------------------------------------------- $$
+    $$ ---         Gaussian beam ( Gaussian distribution )           --- $$
+    $$ ----------------------------------------------------------------- $$
+    s-type    =   13                    $$ ( 13:gaussian-xy )
+    totfact   = @beam.totfact
+    proj      = electron
+    dir       =  1.0
+    r1        = @beam.FWHM
+    z0        = @beam.zStart
+    z1        = @beam.zEnd
+    e0        = @beam.energy
+
+
+    $$ ----------------------------------------------------------------- $$
+    $$ ---         Beam profile ( beam emittance )                   --- $$
+    $$ ----------------------------------------------------------------- $$
+    $$ s-type    =   11                    $$ ( 11: beam-profile-xy )
+    $$ totfact   = @beam.totfact
+    $$ proj      = electron
+    $$ dir       =  1.0
+    $$ z0        = @beam.zStart
+    $$ z1        = @beam.zEnd
+    $$ rx        = 0.0
+    $$ ry        = 0.0
+    $$ wem       = 0.0
+    $$ x1        = @beam.HWHM
+    $$ y1        = @beam.HWHM
+    $$ xmrad1    = 0.0
+    $$ ymrad1    = 0.0
+    $$ x2        = 0.0    
+    $$ y2        = 0.0    
+    $$ xmrad2    = 0.0
+    $$ ymrad2    = 0.0
+    $$ e0        = @beam.energy
