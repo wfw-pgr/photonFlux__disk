@@ -57,9 +57,9 @@ def estimate__RIproduction( paramsFile=None ):
     # ------------------------------------------------- #
     # --- [6] integrate dY(E) with respect to E     --- #
     # ------------------------------------------------- #
-    if   ( params["integral.method"] == "simpson" ):
+    if   ( params["integral.method"] == "simpson"     ):
         YieldRate = itg.simpson  ( dYield, x=EAxis )
-    elif ( params["integral.method"] == "trapezoid" ):
+    elif ( params["integral.method"] == "trapezoid"   ):
         YieldRate = itg.trapezoid( dYield, x=EAxis )
     elif ( params["integral.method"] == "rectangular" ):
         YieldRate = np.dot( np.diff( EAxis ), dYield[:-1] )
@@ -67,16 +67,25 @@ def estimate__RIproduction( paramsFile=None ):
         print( "[estimate__RIproduction.py] integral.method == {} ??? "\
                .format( params["integral.method"] ) )
         sys.exit()
-        
-    N_yield    = params["photon.beam.duration"] * 60*60.0  * YieldRate 
+
+    #  -- Taylor (linear)            -- #
+    # N_yield    = params["photon.beam.duration"] * 60*60.0  * YieldRate
+    #  -- Y0/L [ 1 - exp( - L t ) ]  -- #
+    lambda_t   = params["product.lambda.1/s"]   * ( params["photon.beam.duration"] * 60*60.0 )
+    N_max      = YieldRate / params["product.lambda.1/s"]
+    N_yield    = N_max * ( 1.0 - np.exp( -1.0*lambda_t ) )
     A_yield    = params["product.lambda.1/s"]   * N_yield
     lam1,lam2  = params["product.lambda.1/s"], params["decayed.lambda.1/s"]
     t_max_s    = np.log( lam1/lam2 ) / ( lam1 - lam2 )
     t_max      = halflife__unitConvert( { "value":t_max_s, "unit":"s" }, to_unit="d" )["value"]
     ratio      = ( lam2/( lam2-lam1 ) )*( np.exp( -lam1*t_max_s ) - np.exp( -lam2*t_max_s ) )*100
     A_decay    = ( ratio/100.0 ) * A_yield
-    efficiency = A_decay / ( params["target.activity.Bq"] * params["photon.beam.current.use"] \
-                             * params["photon.beam.duration"] )
+    if ( params["target.RI"] ):
+        efficiency = A_decay / ( params["target.activity.Bq"]*params["photon.beam.current.use"]\
+                                 * params["photon.beam.duration"] )
+    else:
+        efficiency = A_decay / ( params["target.mass.g"]*params["photon.beam.current.use"]\
+                                 * params["photon.beam.duration"] )
     results    = { "YieldRate":YieldRate, "N_yield":N_yield, "A_yield":A_yield, \
                    "t_max":t_max, "ratio":ratio, "A_decay":A_decay, "efficiency":efficiency }
     
@@ -364,9 +373,14 @@ def calculate__parameters( params=None ):
         params["target.tN_product"] = params["target.atoms/cm3"]*params["target.thick.cm"]
         
     elif ( params["target.thick.type"].lower() == "fluence" ):
-        N_atoms                     = params["target.activity.Bq"] / params["target.lambda.1/s"]
-        V_target                    = N_atoms  / params["target.atoms/cm3"]
-        params["target.thick.cm"]   = V_target / params["target.area.cm2"]
+        if ( params["target.RI"] ):
+            N_atoms   = params["target.activity.Bq"]/params["target.lambda.1/s"]
+            V_target  = N_atoms  / params["target.atoms/cm3"]
+            t_target  = V_target / params["target.area.cm2"]
+        else:
+            t_target  = params["target.mass.g"] / \
+                ( params["target.area.cm2"] * params["target.g/cm3"] )
+        params["target.thick.cm"]   = t_target
         params["target.tN_product"] = params["target.atoms/cm3"]
         #
         # thick t is included in :: photonFlux profile :: 

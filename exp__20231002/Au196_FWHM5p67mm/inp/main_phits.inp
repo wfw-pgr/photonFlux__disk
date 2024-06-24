@@ -25,7 +25,7 @@ $$ $ <include> filepath = inp/variables.def
 input file for radiation shieldings.
 
 [Parameters]
-  icntl     = 8                        $$ ( 0:transport, 6:check-source, 8:check-Geometry )
+  icntl     = 0                        $$ ( 0:transport, 6:check-source, 8:check-Geometry )
   file(1)   = @phits_directory         $$
   file(6)   = @phits_output            $$ File Name of output
   maxcas    = @nCascade                $$ #.of particles

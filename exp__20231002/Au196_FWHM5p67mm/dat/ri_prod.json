@@ -11,28 +11,30 @@
     /* ------------------------------------------------------------------- */
     /* ---  [2]  target materials settings                             --- */
     /* ------------------------------------------------------------------- */
-    "target.g/cm3"                 :4.9,                            // RaCl2
-    "target.g/mol"                 :297.0,                          // RaCl2
-    "target.activity.Bq"           :49.9e3,                         // (Bq)
-    "target.halflife"              :{ "value":1600.0, "unit":"y" }, // (Ra-226)
-    "product.halflife"             :{ "value":  14.9, "unit":"d" }, // (Ra-225)
-    "decayed.halflife"             :{ "value":   9.9, "unit":"d" }, // (Ac-225)
+    "target.RI"                    :false,                          // RI/non-RI (T/F)
+    "target.g/cm3"                 :19.3,                           // Au
+    "target.g/mol"                 :197.0,                          // Au
+    "target.mass.g"                :4.75e-3,                        // (g)
+    "target.activity.Bq"           :0.0,                            // (Bq)
+    "target.halflife"              :{ "value":1600.0, "unit":"y" }, // (Au-197)
+    "product.halflife"             :{ "value":  6.16, "unit":"d" }, // (Au-196)
+    "decayed.halflife"             :{ "value":   1.0, "unit":"d" }, // (None)
     
     "target.thick.type"            :"fluence",                      // ["fluence","Bq","direct"]
     "target.thick.direct.mm"       :1.0 ,                           // if ( type == direct )
     
     "target.area.type"             :"disk",                         // [ "direct", "disk" ]
     "target.area.direct.cm2"       :7.07e-2,                        // if ( type == direct )
-    "target.area.diameter.mm"      :11.0,                           // if ( type == disk )
+    "target.area.diameter.mm"      :3.0,                           // if ( type == disk )
     
     
     /* ------------------------------------------------------------------- */
     /* ---  [3]  integral settings                                     --- */
     /* ------------------------------------------------------------------- */
-    "integral.method"              :"rectangular", // [ "simpson", "trapezoid", "rectangular"]
+    "integral.method"              :"simpson",     // [ "simpson", "trapezoid", "rectangular"]
     "integral.EAxis.min"           :0.0,           // (MeV)
-    "integral.EAxis.max"           :20.0,          // (MeV)
-    "integral.EAxis.num"           :201,           // 
+    "integral.EAxis.max"           :50.0,          // (MeV)
+    "integral.EAxis.num"           :501,           // 
 
     
     /* ------------------------------------------------------------------- */
@@ -46,9 +48,9 @@
     "photon.fit.method"            : "linear",
     "photon.fit.p0"                : null,        // gaussian
     "photon.fit.Eth"               : 6.4,         // (MeV)
-    "photon.beam.current.sim"      : 125.7,       // (uA) current in PHITS sim.
-    "photon.beam.current.use"      : 125.7,       // (uA) current to be assumed.
-    "photon.beam.duration"         : 5.95,        // (h)
+    "photon.beam.current.sim"      : 100.0,       // (uA) current in PHITS sim.
+    "photon.beam.current.use"      :   6.2,       // (uA) current to be assumed.
+    "photon.beam.duration"         : 1.667e-1,    // (h)
 
     
     /* ------------------------------------------------------------------- */
