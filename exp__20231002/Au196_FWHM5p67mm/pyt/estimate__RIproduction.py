@@ -11,6 +11,7 @@ import nkUtilities.configSettings as cfs
 # ========================================================= #
 # ===  estimate__RIproduction.py                        === #
 # ========================================================= #
+
 def estimate__RIproduction( paramsFile=None ):
 
     e_, pf_, xs_ =  0, 1, 1
@@ -41,13 +42,8 @@ def estimate__RIproduction( paramsFile=None ):
     # ------------------------------------------------- #
     # --- [4] load cross-section                    --- #
     # ------------------------------------------------- #
-    import nkUtilities.load__pointFile as lpf
-    xs_raw    = lpf.load__pointFile( inpFile=params["xsection.filename"], returnType="point")
-    xs_fit_mb = fit__forRIproduction( xD=xs_raw[:,e_], yD=xs_raw[:,xs_], xI=EAxis, \
-                                      mode=params["xsection.fit.method"], \
-                                      p0=params["xsection.fit.p0"], \
-                                      threshold=params["xsection.fit.Eth"] )
-    xs_fit    = mb2cm2 * xs_fit_mb
+    xs_fit_mb, xs_raw = load__xsection  ( EAxis=EAxis, params=params )
+    xs_fit            = mb2cm2 * xs_fit_mb
     
     # ------------------------------------------------- #
     # --- [5] calculate dY(E)                       --- #
@@ -57,37 +53,7 @@ def estimate__RIproduction( paramsFile=None ):
     # ------------------------------------------------- #
     # --- [6] integrate dY(E) with respect to E     --- #
     # ------------------------------------------------- #
-    if   ( params["integral.method"] == "simpson"     ):
-        YieldRate = itg.simpson  ( dYield, x=EAxis )
-    elif ( params["integral.method"] == "trapezoid"   ):
-        YieldRate = itg.trapezoid( dYield, x=EAxis )
-    elif ( params["integral.method"] == "rectangular" ):
-        YieldRate = np.dot( np.diff( EAxis ), dYield[:-1] )
-    else:
-        print( "[estimate__RIproduction.py] integral.method == {} ??? "\
-               .format( params["integral.method"] ) )
-        sys.exit()
-
-    #  -- Taylor (linear)            -- #
-    # N_yield    = params["photon.beam.duration"] * 60*60.0  * YieldRate
-    #  -- Y0/L [ 1 - exp( - L t ) ]  -- #
-    lambda_t   = params["product.lambda.1/s"]   * ( params["photon.beam.duration"] * 60*60.0 )
-    N_max      = YieldRate / params["product.lambda.1/s"]
-    N_yield    = N_max * ( 1.0 - np.exp( -1.0*lambda_t ) )
-    A_yield    = params["product.lambda.1/s"]   * N_yield
-    lam1,lam2  = params["product.lambda.1/s"], params["decayed.lambda.1/s"]
-    t_max_s    = np.log( lam1/lam2 ) / ( lam1 - lam2 )
-    t_max      = halflife__unitConvert( { "value":t_max_s, "unit":"s" }, to_unit="d" )["value"]
-    ratio      = ( lam2/( lam2-lam1 ) )*( np.exp( -lam1*t_max_s ) - np.exp( -lam2*t_max_s ) )*100
-    A_decay    = ( ratio/100.0 ) * A_yield
-    if ( params["target.RI"] ):
-        efficiency = A_decay / ( params["target.activity.Bq"]*params["photon.beam.current.use"]\
-                                 * params["photon.beam.duration"] )
-    else:
-        efficiency = A_decay / ( params["target.mass.g"]*params["photon.beam.current.use"]\
-                                 * params["photon.beam.duration"] )
-    results    = { "YieldRate":YieldRate, "N_yield":N_yield, "A_yield":A_yield, \
-                   "t_max":t_max, "ratio":ratio, "A_decay":A_decay, "efficiency":efficiency }
+    results   = integrate__yield( EAxis=EAxis, dYield=dYield, params=params )
     
     # ------------------------------------------------- #
     # --- [7] draw sigma(E), phi(E), dY(E)          --- #
@@ -101,7 +67,7 @@ def estimate__RIproduction( paramsFile=None ):
     Data = { "params":params, "EAxis":EAxis, "results":results, \
              "pf_fit":pf_fit, "xs_fit":xs_fit, "dYield":dYield }
     write__results( Data=Data, params=params )
-    return( YieldRate )
+    return( results["YieldRate"] )
 
 
 # ========================================================= #
@@ -109,11 +75,12 @@ def estimate__RIproduction( paramsFile=None ):
 # ========================================================= #
 
 def load__photonFlux( EAxis=None, params=None ):
-
+    
     e_, f_             = 0, 1
     el_, eu_, pf_, er_ = 0, 1, 2, 3
     expr_from          = "^#\s*e\-lower"
     expr_to            = "^\s*$"
+    # -- (unit):: E: [MeV], phi: [photons m/MeV/s] -- #
     
     # ------------------------------------------------- #
     # --- [1] load photon flux file                 --- #
@@ -139,7 +106,7 @@ def load__photonFlux( EAxis=None, params=None ):
         else:
             print( "[estimate__RIproduction.py] unknown photon.bin2point.convert [ERROR] " )
         pf_raw = np.concatenate( [ e_avg[:,np.newaxis], p_nrm[:,np.newaxis] ], axis=1 )
-        
+
     # ------------------------------------------------- #
     # --- [2] fit photon flux                       --- #
     # ------------------------------------------------- #
@@ -150,6 +117,106 @@ def load__photonFlux( EAxis=None, params=None ):
     return( pf_fit_uA, pf_raw )
 
 
+# ========================================================= #
+# ===  load x-section Data                              === #
+# ========================================================= #
+
+def load__xsection( EAxis=None, params=None ):
+    
+    e_, xs_  = 0, 1
+    eV2MeV   = 1.0e-6
+    b2mb     = 1.0e+3
+
+    # ------------------------------------------------- #
+    # --- [1] load data                             --- #
+    # ------------------------------------------------- #
+    import nkUtilities.load__pointFile as lpf
+    xs_raw     = lpf.load__pointFile( inpFile=params["xsection.filename"], returnType="point")
+    if   ( params["xsection.database"].lower() == "jendl" ):
+        xs_raw[:, e_] = xs_raw[:, e_] * eV2MeV
+        xs_raw[:,xs_] = xs_raw[:,xs_] * b2mb
+    elif ( params["xsection.database"].lower() == "tendl" ):
+        pass
+    else:
+        print( "[estimate__RIproduction.py] xsection.database == {} ??? "\
+               .format( params["xsection.database"] ) )
+    
+    # ------------------------------------------------- #
+    # --- [2] fit x-section Data                    --- #
+    # ------------------------------------------------- #
+    xs_fit_mb = fit__forRIproduction( xD=xs_raw[:,e_], yD=xs_raw[:,xs_], xI=EAxis, \
+                                      mode=params["xsection.fit.method"], \
+                                      p0=params["xsection.fit.p0"], \
+                                      threshold=params["xsection.fit.Eth"] )
+    return( xs_fit_mb, xs_raw )
+
+
+# ========================================================= #
+# ===  integrate__yield                                 === #
+# ========================================================= #
+
+def integrate__yield( EAxis=None, dYield=None, params=None ):
+    
+    # ------------------------------------------------- #
+    # --- [1] integrate along EAxis                 --- #
+    # ------------------------------------------------- #
+    if   ( params["integral.method"] == "simpson"     ):
+        YieldRate = itg.simpson  ( dYield, x=EAxis )
+    elif ( params["integral.method"] == "trapezoid"   ):
+        YieldRate = itg.trapezoid( dYield, x=EAxis )
+    elif ( params["integral.method"] == "rectangular" ):
+        YieldRate = np.dot( np.diff( EAxis ), dYield[:-1] )
+    else:
+        print( "[estimate__RIproduction.py] integral.method == {} ??? "\
+               .format( params["integral.method"] ) )
+        sys.exit()
+
+    # ------------------------------------------------- #
+    # --- [2] calculate results                     --- #
+    # ------------------------------------------------- #
+    #  -- Taylor (linear) case :: N_yield = params["photon.beam.duration"]*60*60 * YieldRate
+    #  -- Non-Linear case      :: N_yield = Y0/L [ 1 - exp( - L t ) ]  -- #
+    lambda_t  = params["product.lambda.1/s"]   * ( params["photon.beam.duration"] * 60*60.0 )
+    N_max     = YieldRate / params["product.lambda.1/s"]
+    N_yield   = N_max * ( 1.0 - np.exp( -1.0*lambda_t ) )
+    A_yield   = params["product.lambda.1/s"]   * N_yield
+
+    # ------------------------------------------------- #
+    # --- [3] predict decay production              --- #
+    # ------------------------------------------------- #
+    if ( params["decayed.halflife"] is not None ):
+        lam1,lam2 = params["product.lambda.1/s"], params["decayed.lambda.1/s"]
+        t_max_s   = np.log( lam1/lam2 ) / ( lam1 - lam2 )
+        t_max     = halflife__unitConvert( {"value":t_max_s,"unit":"s"}, to_unit="d" )["value"]
+        ratio     = ( lam2/(lam2-lam1) )*( np.exp( -lam1*t_max_s )-np.exp( -lam2*t_max_s ) )*100
+        A_decay   = ( ratio/100.0 )* A_yield
+    else:
+        t_max, ratio, A_decay = None, None, None
+
+    # ------------------------------------------------- #
+    # --- [4] calculate efficiency                  --- #
+    # ------------------------------------------------- #
+    eta_yield_Bq, eta_decay_Bq, eta_decay_wt = None, None, None
+    charge       = params["photon.beam.current.use"] * params["photon.beam.duration"]
+    target_Bq    = params["target.activity.Bq"]
+    eta_yield_wt = A_yield / ( params["target.mass.mg"] * charge )
+    if ( ( target_Bq is not None ) ):
+        eta_yield_Bq = A_yield / ( target_Bq * charge )
+    if ( ( target_Bq is not None ) and ( A_decay is not None ) ):
+        eta_decay_Bq = A_decay / ( target_Bq * charge )
+    if (                               ( A_decay is not None ) ):
+        eta_decay_wt = A_decay / ( params["target.mass.mg"] * charge )
+
+    # ------------------------------------------------- #
+    # --- [5] return results                        --- #
+    # ------------------------------------------------- #
+    results   = { "YieldRate":YieldRate, "N_yield":N_yield, "A_yield":A_yield, \
+                  "t_max":t_max, "ratio":ratio, "A_decay":A_decay, \
+                  "eta_yield_Bq":eta_yield_Bq, "eta_yield_wt":eta_yield_wt, \
+                  "eta_decay_Bq":eta_decay_Bq, "eta_decay_wt":eta_decay_wt, }
+    return( results )
+
+    
 # ========================================================= #
 # ===  fit__forRIproduction                             === #
 # ========================================================= #
@@ -267,25 +334,34 @@ def write__results( Data=None, params=None, stdout="minimum" ):
     if ( Data is None ): sys.exit( "[estimate__RIproduction.py] Data == ???" )
     text1        = "[paramters]\n"
     text2        = "[results]\n"
-    keys1        = [ "t_max", "ratio" ]
-    keys2        = [ "YieldRate", "N_yield", "A_yield", "A_decay", "efficiency" ]
+    keysdict     = { "product": [ "YieldRate", "N_yield", "A_yield", \
+                                  "eta_yield_wt", "eta_yield_Bq" ],\
+                     "decayed": [ "t_max",   "ratio", "A_decay", \
+                                  "eta_decay_wt", "eta_decay_Bq" ]
+    }
+    titlesFormat = "\n"+" "*3+"-"*25+" "*3 + "{}" + " "*3+"-"*25+" "*3 + "\n\n"
     paramsFormat = "{0:>30} :: {1}\n"
     resultFormat = "{0:>30} :: {1:15.8e}   {2}\n"
+    none__Format = "{0:>30} :: {1:}   {2}\n"
     resultUnits  = { "YieldRate":"(atoms/s)", "N_yield":"(atoms)", "A_yield":"(Bq)", \
                      "t_max":"(d)", "ratio":"(%)", "A_decay":"(Bq)", \
-                     "efficiency":"(Bq(Ac)/(Bq(Ra) uA h))" }
-        
+                     "eta_yield_wt":"(Bq/(mg uA h))", "eta_decay_wt":"(Bq/(mg uA h))", \
+                     "eta_yield_Bq":"(Bq/(Bq uA h))", "eta_decay_Bq":"(Bq/(Bq uA h))" }
+    
     # ------------------------------------------------- #
     # --- [1] pack texts                            --- #
     # ------------------------------------------------- #
+    results = Data["results"]
     for key,val in Data["params"].items():
         text1 += paramsFormat.format( key, val )
-    text2 += "\n" + " "*3 + "-"*25 + " "*3 + "[ Decay Time ]" + " "*3 + "-"*25 + "\n"
-    for key in keys1:
-        text2 += resultFormat.format( key, Data["results"][key], resultUnits[key] )
-    text2 += "\n" + " "*3 + "-"*25 + " "*3 + "[ Production ]" + " "*3 + "-"*25 + "\n"
-    for key in keys2:
-        text2 += resultFormat.format( key, Data["results"][key], resultUnits[key] )
+
+    for label in keysdict.keys():
+        text2 += titlesFormat.format( "[ {} ]".format( label.center(10) ) )
+        for key in keysdict[label]:
+            if ( results[key] is not None ):
+                text2 += resultFormat.format( key, results[key], resultUnits[key] )
+            else:
+                text2 += none__Format.format( key, results[key], resultUnits[key] )
     text2 += "\n" + " "*3 + "-"*70 + "\n"
     texts  = text1 + text2 + "\n"
     
@@ -334,6 +410,7 @@ def calculate__parameters( params=None ):
 
     N_Avogadro   = 6.02e23
     mm2cm        = 0.1
+    mg2g         = 1.0e-3
     
     # ------------------------------------------------- #
     # --- [1] arguments                             --- #
@@ -343,12 +420,20 @@ def calculate__parameters( params=None ):
     # ------------------------------------------------- #
     # --- [2] calculate half-life time & lambda     --- #
     # ------------------------------------------------- #
-    keys   = [ "target", "product", "decayed" ]
+    keys = [ "target", "product", "decayed" ]
     for key in keys:
-        key_h         = "{}.halflife"  .format( key )
-        key_l         = "{}.lambda.1/s".format( key )
-        params[key_h] = halflife__unitConvert( params[key_h] )
-        params[key_l] = np.log(2.0) / params[key_h]["value"]
+        key_h = "{}.halflife"  .format( key )
+        key_l = "{}.lambda.1/s".format( key )
+        if ( params[key_h]["value"] is not None ):
+            params[key_h] = halflife__unitConvert( params[key_h] )
+            params[key_l] = np.log(2.0) / params[key_h]["value"]
+        else:
+            params[key_h], params[key_l] = None, None
+    if ( params["product.halflife"] is None ):
+        print( "[estimate__RIproduction.py]  [ERROR] product must be RI, at least." )
+        print( "[estimate__RIproduction.py]  product.halflife == {}"\
+               .format( params["product.halflife"] ) )
+        sys.exit()
         
     # ------------------------------------------------- #
     # --- [3] volume & area model                   --- #
@@ -372,21 +457,26 @@ def calculate__parameters( params=None ):
         params["target.thick.cm"]   = params["target.thick.direct.mm"] * mm2cm
         params["target.tN_product"] = params["target.atoms/cm3"]*params["target.thick.cm"]
         
-    elif ( params["target.thick.type"].lower() == "fluence" ):
-        if ( params["target.RI"] ):
-            N_atoms   = params["target.activity.Bq"]/params["target.lambda.1/s"]
-            V_target  = N_atoms  / params["target.atoms/cm3"]
-            t_target  = V_target / params["target.area.cm2"]
-        else:
-            t_target  = params["target.mass.g"] / \
-                ( params["target.area.cm2"] * params["target.g/cm3"] )
-        params["target.thick.cm"]   = t_target
+    elif ( params["target.thick.type"].lower() == "fluence-bq" ):
+        N_atoms                     = params["target.activity.Bq"]/params["target.lambda.1/s"]
+        V_target                    = N_atoms  / params["target.atoms/cm3"]
+        params["target.thick.cm"]   = V_target / params["target.area.cm2"]
+        params["target.tN_product"] = params["target.atoms/cm3"]
+        params["target.mass.mg"]    = 1.0
+        
+    elif ( params["target.thick.type"].lower() == "fluence-mass" ):
+        V_target                    = ( params["target.mass.mg"]*mg2g ) / params["target.g/cm3"]
+        params["target.thick.cm"]   = V_target / (params["target.area.cm2"])
         params["target.tN_product"] = params["target.atoms/cm3"]
         #
         # thick t is included in :: photonFlux profile :: 
         # fluence = count/m2 = count*m/m3,   =>   fluence * volume = count*m
         # vol in phits's tally must be "V=1", or, flux will be devided by Volume V.
         #
+    else:
+        print( "[estimate__RIproduction.py] target.thick.type == {} ?? [ERROR] "\
+               .format( params["target.thick.type"]  ) )
+        sys.exit()
     # ------------------------------------------------- #
     # --- [5] return                                --- #
     # ------------------------------------------------- #
@@ -398,14 +488,22 @@ def calculate__parameters( params=None ):
 # ========================================================= #
 if ( __name__=="__main__" ):
 
+    # ------------------------------------------------- #
+    # --- [1] argument                              --- #
+    # ------------------------------------------------- #
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument( "--paramsFile", help="input file name." ) ## actual
+    parser.add_argument( "--paramsFile", help="input file name." )
     args   = parser.parse_args()
     if ( args.paramsFile is None ):
         args.paramsFile = "dat/ri_prod.json"
+        print( "[estimate__RIproduction.py] paramsFile (default) == {}".format(args.paramsFile))
     if ( not( os.path.exists( args.paramsFile ) ) ):
         print( "[estimate__RIproduction.py] paramsFile does not exists [ERROR]" )
         print( "[estimate__RIproduction.py] (e.g.) python pyt/estimate__RIproduction.py --paramsFile ri_prod.json" )
         sys.exit()
+
+    # ------------------------------------------------- #
+    # --- [2] call Main Routine                     --- #
+    # ------------------------------------------------- #
     estimate__RIproduction( paramsFile=args.paramsFile )

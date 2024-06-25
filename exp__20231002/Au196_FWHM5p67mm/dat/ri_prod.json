@@ -14,18 +14,19 @@
     "target.RI"                    :false,                          // RI/non-RI (T/F)
     "target.g/cm3"                 :19.3,                           // Au
     "target.g/mol"                 :197.0,                          // Au
-    "target.mass.g"                :4.75e-3,                        // (g)
-    "target.activity.Bq"           :0.0,                            // (Bq)
-    "target.halflife"              :{ "value":1600.0, "unit":"y" }, // (Au-197)
+    "target.mass.mg"               :4.75,                           // (mg)
+    "target.activity.Bq"           :null,                           // (Bq)
+    "target.halflife"              :{ "value":  null, "unit":"y" }, // (Au-197)
     "product.halflife"             :{ "value":  6.16, "unit":"d" }, // (Au-196)
-    "decayed.halflife"             :{ "value":   1.0, "unit":"d" }, // (None)
+    "decayed.halflife"             :{ "value":  null, "unit":"d" }, // (None)
     
-    "target.thick.type"            :"fluence",                      // ["fluence","Bq","direct"]
+    // -- thick calculation -- //   // [ "Bq", "direct", "fluence-Bq", "fluence-mass" ]  //
+    "target.thick.type"            :"fluence-mass",
     "target.thick.direct.mm"       :1.0 ,                           // if ( type == direct )
     
     "target.area.type"             :"disk",                         // [ "direct", "disk" ]
     "target.area.direct.cm2"       :7.07e-2,                        // if ( type == direct )
-    "target.area.diameter.mm"      :3.0,                           // if ( type == disk )
+    "target.area.diameter.mm"      :3.0,                            // if ( type == disk )
     
     
     /* ------------------------------------------------------------------- */
@@ -46,7 +47,7 @@
     "photon.filename"              : "out/fluence_energy.dat",
     "photon.bin2point.convert"     : "edge",      // convert binned data into E v.s. photons
     "photon.fit.method"            : "linear",
-    "photon.fit.p0"                : null,        // gaussian
+    "photon.fit.p0"                : null,        // initial parameter for fitting.
     "photon.fit.Eth"               : 6.4,         // (MeV)
     "photon.beam.current.sim"      : 100.0,       // (uA) current in PHITS sim.
     "photon.beam.current.use"      :   6.2,       // (uA) current to be assumed.
@@ -65,8 +66,10 @@
     /* ------------------------------------------------------------------- */
     /*  cross-section's unit   ( mb )                                   */
     /* ------------------------------------------------------------------- */
-    "xsection.filename"            :"dat/xs__TENDL_Ra226_gn_Ra225_2019.dat",
-    "xsection.fit.Eth"             :6.4,           // (MeV)
+    // "xsection.filename"            :"dat/xs__TENDL_Ra226_gn_Ra225_2019.dat",
+    "xsection.filename"            :"dat/xs__JENDL_Au197_gn_Au196.dat",
+    "xsection.database"            :"JENDL",       // JENDL (eV-barn) or TENDL (MeV-mb)
+    "xsection.fit.Eth"             :8.07,          // (MeV)
     "xsection.fit.method"          :"linear",      // [ "linear", "gaussian", "log-poly5th" ]
     "xsection.fit.p0"              :null,          // linear
     // "xsection.fit.method"          :"log-poly5th", // [ "linear", "gaussian", "log-poly5th" ]
@@ -83,6 +86,13 @@
     "plot.photon.norm"             :1.0e4,         // (photons/MeV/uA/s)
     "plot.dYield.norm"             :1.0e4,         // (atoms/MeV/s)  
     "plot.norm.auto"               :true,          // if true, automatic range
+
+
+
+
+
+
+
 
     
     /* ------------------------------------------------------------------- */
@@ -120,6 +130,5 @@
     "LinacPhi.norm.method"         :"simpson",     // "simpson"
     "LinacPhi.norm.current"        :1.0,           // (uA)
     "LinacPhi.norm.e-g.efficiency" :40.0,          // (%)
-
     
 }
